@@ -245,13 +245,11 @@
     });
   </script>
 
-  <!-- router.js é um script global, carregado primeiro (após correção do return ilegal) -->
-  <script src="../js/router.js"></script>
+  <!-- router.js e div#app removidos, pois administracao.html será autocontida -->
+  <!-- <script src="../js/router.js"></script> -->
+  <!-- <div id="app"></div> -->
 
-  <!-- O div#app é usado pelo router.js para carregar conteúdo -->
-  <div id="app"></div>
-
-  <!-- Scripts de módulo para auth, navbar, footer, topbar e inicialização de rotas -->
+  <!-- Scripts de módulo para auth, navbar, footer, topbar -->
   <script type="module">
     // Funções de autenticação (isLoggedIn)
     import { isLoggedIn } from '../assets/js/auth.js';
