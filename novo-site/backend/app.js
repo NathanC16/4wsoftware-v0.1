@@ -45,24 +45,25 @@ app.use(helmet({
         "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav
         "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // script navigateTo, logout, getUserPermissions
         // Hashes para scripts inline em administracao.html
-        "'sha256-FM7xFCwIjyIhANd8todDhv0/xn+4BcFa2vh+ZlE/9xA='",
-        "'sha256-iU1ULDRgEVZ0xXtdBEJIZXe2/nn+zW3Tw06JI2q+MH0='",
-        "'sha256-d38ou+DoHii245vxodueH9vFqYwyjZK0KvUHoBltC2I='"
+        "'sha256-FM7xFCwIjyIhANd8todDhv0/xn+4BcFa2vh+ZlE/9xA='", // Script chartVisaoGeral e toggleSection
+        "'sha256-iU1ULDRgEVZ0xXtdBEJIZXe2/nn+zW3Tw06JI2q+MH0='", // Script chartResumoMensal
+        "'sha256-d38ou+DoHii245vxodueH9vFqYwyjZK0KvUHoBltC2I='", // Script chartIndicadores
+        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='"  // Novo hash para administracao.html linha 255 (script module login check)
       ],
       scriptSrcAttr: [
         "'self'",
         "'unsafe-inline'", // Permitir onclick e outros handlers inline
         "'unsafe-hashes'",
-        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='",
-        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='",
-        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='",
-        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='",
-        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='",
-        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='",
-        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='"
+        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='", // toggleSection('visaoGeral') em administracao.html
+        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='", // toggleSection('resumoMensal') em administracao.html
+        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='", // toggleSection('indicadores') em administracao.html
+        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='", // toggleSection('faturamento') em administracao.html
+        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='", // toggleSection('auditoriaFaturas') em administracao.html
+        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='", // toggleSection('contratos') em administracao.html
+        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='"  // toggleSection('rankingVendedoras') em administracao.html
       ],
       styleSrc: ["'self'", "'unsafe-inline'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080"],
+      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080", "https://source.unsplash.com"], // Adicionado source.unsplash.com
       connectSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080", "https://servicodados.ibge.gov.br"],
       fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:", "https://fonts.gstatic.com"],
     },

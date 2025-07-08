@@ -1,38 +1,55 @@
-// routes.js (frontend)
+// router.js (frontend) - Renomeado para clareza, anteriormente podia ser confundido com routes.js do backend
 
+// As rotas devem ser relativas à pasta 'pages' onde os arquivos HTML residem,
+// ou absolutas a partir da raiz do servidor (ex: '/pages/login4w.html')
+// Para simplificar, vamos usar caminhos relativos à pasta 'pages'
+// assumindo que router.js é sempre chamado de um HTML dentro de 'pages'.
 const routes = {
-  '/': 'pages/login4w.html',
+  '/': 'login4w.html', // Se / for servido pelo backend para /pages/index.html, este pode não ser usado.
+                      // Se for um SPA puro no frontend, / poderia ser login4w.html ou home.html.
   '/home': {
-    page: 'pages/home.html',
-    permissions: ['podeAcessarHome']
+    page: 'home.html',
+    permissions: ['podeAcessarHome'] // As permissões devem corresponder às do token
   },
   '/cadastro': {
-    page: 'pages/cadastro.html',
-    permissions: ['podeAcessarCadastro']
+    page: 'cadastro.html',
+    permissions: ['podeAcessarCadastro'] // Exemplo
   },
   '/usinas': {
-    page: 'pages/usinascadastro.html',
-    permissions: ['podeAcessarUsinas']
+    page: 'usinascadastro.html',
+    permissions: ['podeAcessarUsinas'] // Exemplo
   },
   '/administracao': {
-    page: 'pages/administração.html',
-    permissions: ['podeAcessarAdministracao']
+    // Corrigido: 'administração.html' para 'administracao.html' (sem cedilha)
+    page: 'administracao.html',
+    permissions: ['podeAcessarAdministracao'] // Exemplo
   },
   '/painel-admin': {
-    page: 'pages/admin-panel.html',
-    permissions: ['podeAcessarPainelAdmin']
+    // Este pode ser o mesmo que /administracao ou uma página diferente.
+    // Assumindo que admin-panel.html é o painel de admin geral.
+    page: 'admin-dashboard.html', // Corrigido para o nome de arquivo existente
+    permissions: ['podeAcessarPainelAdmin'] // Exemplo
   },
   '/usuarios': {
-    page: 'pages/userdados.html',
-    permissions: ['podeAcessarUsuarios']
+    page: 'userdados.html', // ou usuarioscadastro.html dependendo do arquivo real
+    permissions: ['podeAcessarUsuarios'] // Exemplo
   },
   '/individual': {
-    page: 'pages/individual.html',
-    permissions: ['podeAcessarIndividual']
+    page: 'visualizadoridividual.html', // Corrigido para o nome de arquivo existente
+    permissions: ['podeAcessarIndividual'] // Exemplo
   },
   '/consumo': {
-    page: 'pages/historicofaturas.html',
-    permissions: ['podeAcessarConsumo']
+    page: 'consumo.html', // Corrigido para o nome de arquivo existente
+    permissions: ['podeAcessarConsumo'] // Exemplo
+  },
+  // Adicionar outras rotas conforme necessário, ex:
+  '/historicofaturas': {
+    page: 'historicofaturas.html',
+    permissions: [] // Exemplo: rota pública dentro da área logada ou com permissão específica
+  },
+   '/login4w': { // Adicionando rota explícita para login se necessário
+    page: 'login4w.html',
+    permissions: [] // Página de login geralmente não requer permissão
   }
 };
  function isTokenExpired(token) {
@@ -98,17 +115,31 @@ function loadPage(path) {
   }
 
   if (!routeConfig) {
-    return fetch('pages/404.html')
-      .then(res => res.text())
-      .then(html => (document.getElementById('app').innerHTML = html));
+    // Corrigido caminho para 404.html, assumindo que está em /pages/404.html
+    // Se router.js é chamado de uma página em /pages/, '404.html' é relativo.
+    // Para ser mais robusto, usar caminho absoluto do servidor para /pages/404.html
+    // ou garantir que 404.html esteja no mesmo nível se usar path relativo.
+    // Usando '/pages/404.html' para ser explícito do servidor.
+    return fetch('/pages/404.html')
+      .then(res => {
+        if (!res.ok) throw new Error('Página 404 não encontrada no servidor');
+        return res.text();
+      })
+      .then(html => (document.getElementById('app').innerHTML = html))
+      .catch(err => {
+        console.error("Erro ao carregar página 404:", err);
+        document.getElementById('app').innerHTML = '<h1>Erro 404 - Página não encontrada</h1><p>Ocorreu um problema ao tentar carregar a página de erro.</p>';
+      });
   }
 
+  // Se routeConfig é uma string, é um caminho direto para um HTML (sem permissões)
   if (typeof routeConfig === 'string') {
-    return fetch(routeConfig)
+    return fetch(routeConfig) // Caminho já deve ser relativo a 'pages/' (ex: 'login4w.html')
       .then(res => res.text())
       .then(html => (document.getElementById('app').innerHTML = html));
   }
 
+  // Se routeConfig é um objeto, tem 'page' e 'permissions'
   const permissions = getUserPermissions();
   const hasPermission = routeConfig.permissions.some(p => permissions.includes(p));
 
