@@ -207,15 +207,28 @@
     // Esta é uma função placeholder. Você precisa implementá-la para buscar
     // as permissões reais do usuário, provavelmente do token JWT ou de uma API.
     function getUserPermissions() {
-      const token = localStorage.getItem('token');
-      if (!token) return [];
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.permissions || [];
-      } catch (e) {
-        console.error("Erro ao obter permissões do token:", e);
-        return [];
-      }
+      // ########## INÍCIO DA SIMULAÇÃO DE PERMISSÕES PARA TESTE ##########
+      // Descomente a linha abaixo e comente o bloco try-catch para simular.
+      // Lembre-se de remover esta simulação e usar a lógica real de token.
+      console.warn("getUserPermissions() ESTÁ SIMULANDO TODAS AS PERMISSÕES PARA TESTE!");
+      return [
+        'podeAcessarHome',
+        'podeAcessarPainelAdmin',
+        'podeAcessarCadastro',
+        'podeAcessarUsinas',
+        'podeAcessarAdministracao'
+      ];
+      // ########## FIM DA SIMULAÇÃO DE PERMISSÕES PARA TESTE ##########
+
+      // const token = localStorage.getItem('token');
+      // if (!token) return [];
+      // try {
+      //   const payload = JSON.parse(atob(token.split('.')[1]));
+      //   return payload.permissions || [];
+      // } catch (e) {
+      //   console.error("Erro ao obter permissões do token:", e);
+      //   return [];
+      // }
     }
   </script>
 </body>
