@@ -91,6 +91,34 @@
 
   <div id="user-info" style="padding: 1rem 2rem; color: #1b5e20; font-weight: 600;"></div>
 
+  <!-- Definições de funções movidas para o início dos scripts -->
+  <script>
+    // Função navigateTo para lidar com a navegação.
+    function navigateTo(path) {
+      window.location.href = path;
+    }
+
+    // Função logout para o botão de sair.
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('loggedInUser');
+      localStorage.removeItem('userPermissions');
+      window.location.href = 'login4w.html';
+    }
+
+    // getUserPermissions com SIMULAÇÃO DE TODAS AS PERMISSÕES PARA TESTE
+    function getUserPermissions() {
+      console.warn("getUserPermissions() ESTÁ SIMULANDO TODAS AS PERMISSÕES PARA TESTE!");
+      return [
+        'podeAcessarHome',
+        'podeAcessarPainelAdmin',
+        'podeAcessarCadastro',
+        'podeAcessarUsinas',
+        'podeAcessarAdministracao'
+      ];
+    }
+  </script>
+
   <script>
     const usuario = {
       nome: 'João Silva',
@@ -188,31 +216,8 @@
     });
   </script>
 
-  <script type="module" src="../js/fetchProtectedData.js"></script> <!-- Caminho corrigido -->
+  <script type="module" src="../js/fetchProtectedData.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Função navigateTo para lidar com a navegação.
-    function navigateTo(path) {
-      window.location.href = path;
-    }
-
-    // Função logout para o botão de sair.
-    function logout() {
-      localStorage.removeItem('token');
-      window.location.href = 'login4w.html';
-    }
-
-    // getUserPermissions com SIMULAÇÃO DE TODAS AS PERMISSÕES PARA TESTE
-    function getUserPermissions() {
-      console.warn("getUserPermissions() ESTÁ SIMULANDO TODAS AS PERMISSÕES PARA TESTE!");
-      return [
-        'podeAcessarHome',
-        'podeAcessarPainelAdmin',
-        'podeAcessarCadastro',
-        'podeAcessarUsinas',
-        'podeAcessarAdministracao'
-      ];
-    }
-  </script>
+  <!-- Definições de função movidas para cima -->
 </body>
 </html>

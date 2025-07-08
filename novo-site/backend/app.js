@@ -52,18 +52,11 @@ app.use(helmet({
       ],
       scriptSrcAttr: [
         "'self'",
-        "'unsafe-inline'", // Permitir onclick e outros handlers inline
-        "'unsafe-hashes'",
-        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='", // toggleSection('visaoGeral') em administracao.html
-        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='", // toggleSection('resumoMensal') em administracao.html
-        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='", // toggleSection('indicadores') em administracao.html
-        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='", // toggleSection('faturamento') em administracao.html
-        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='", // toggleSection('auditoriaFaturas') em administracao.html
-        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='", // toggleSection('contratos') em administracao.html
-        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='"  // toggleSection('rankingVendedoras') em administracao.html
+        "'unsafe-inline'" // Permitir todos os manipuladores de evento inline (onclick, etc.)
+                         // Removidos hashes específicos daqui para evitar conflito que ignora 'unsafe-inline'
       ],
       styleSrc: ["'self'", "'unsafe-inline'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080", "https://source.unsplash.com"], // Adicionado source.unsplash.com
+      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080", "https://source.unsplash.com"],
       connectSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080", "https://servicodados.ibge.gov.br"],
       fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:", "https://fonts.gstatic.com"],
     },
