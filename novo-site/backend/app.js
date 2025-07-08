@@ -28,7 +28,34 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com", "https://code.jquery.com", "https://cdn.jsdelivr.net"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-eval'", // Necessário para Chart.js se não for refatorado
+        "https://localhost:8080",
+        "https://127.0.0.1:8080",
+        "https://cdn.jsdelivr.net",
+        "https://cdn.datatables.net",
+        "https://cdnjs.cloudflare.com",
+        "https://code.jquery.com"
+      ],
+      // Adicionando script-src-attr para os handlers onclick
+      // Idealmente, estes onlick seriam movidos para event listeners em JS
+      scriptSrcAttr: [
+        "'self'",
+        "'unsafe-hashes'", // Necessário para permitir os hashes SHA
+        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='", // toggleSection('visaoGeral')
+        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='", // toggleSection('resumoMensal')
+        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='", // toggleSection('indicadores')
+        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='", // toggleSection('faturamento')
+        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='", // toggleSection('auditoriaFaturas')
+        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='", // toggleSection('contratos')
+        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='", // toggleSection('rankingVendedoras')
+        // Se 'unsafe-inline' ainda for necessário para outros atributos, pode ser adicionado aqui,
+        // mas é melhor usar hashes ou refatorar para event listeners.
+        // Removido 'unsafe-inline' de scriptSrc global para maior segurança,
+        // já que os scripts inline problemáticos (onclick) estão sendo tratados com hashes.
+        // Se houver outros scripts inline (não atributos), eles precisarão de seus próprios hashes ou nonces.
+      ],
       styleSrc: ["'self'", "'unsafe-inline'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080"],
       connectSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080", "https://servicodados.ibge.gov.br"],
