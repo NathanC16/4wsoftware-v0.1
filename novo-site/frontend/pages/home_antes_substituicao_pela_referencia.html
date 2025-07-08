@@ -77,10 +77,10 @@
 <body>
   <nav>
     <ul>
-      <li id="link-home"><a href="#" onclick="navigateTo('home.html')">Home</a></li>
-      <li id="link-admin"><a href="#" onclick="navigateTo('admin/index.html')">Admin</a></li>
-      <li id="link-cadastro"><a href="#" onclick="navigateTo('cadastro.html')">Cadastro</a></li>
-      <li id="link-usinas"><a href="#" onclick="navigateTo('usinascadastro.html')">Usinas</a></li>
+      <li id="link-home"><a href="home.html">Home</a></li>
+      <li id="link-admin"><a href="admin/index.html">Admin</a></li>
+      <li id="link-cadastro"><a href="cadastro.html">Cadastro</a></li>
+      <li id="link-usinas"><a href="usinascadastro.html">Usinas</a></li>
     </ul>
   </nav>
 
@@ -91,6 +91,9 @@
 
   <div id="user-info" style="padding: 1rem 2rem; color: #1b5e20; font-weight: 600;"></div>
 
+  <!-- Botão de Administração adicionado da referência -->
+  <a href="#" onclick="navigateTo('administracao.html')" data-permission="podeAcessarAdministracao" class="btn btn-warning mt-3 ms-3" style="display: none;">Administração (Condicional)</a>
+
   <script>
     const usuario = {
       nome: 'João Silva',
@@ -100,14 +103,14 @@
     const cards = [
       { titulo: 'Dashboard', descricao: 'Acesse sua visão geral', rota: 'administracao.html' },
       { titulo: 'Faturas', descricao: 'Visualize suas faturas', rota: 'historicofaturas.html' },
-      { titulo: 'Consumo', descricao: 'Veja seus dados de consumo', rota: 'consumo.html' },
+      { titulo: 'Consumo', descricao: 'Veja seus dados de consumo', rota: 'historico-inadimplentes.html' },
       { titulo: 'Ajuda', descricao: 'Precisa de suporte?', rota: 'ajuda.html' }
     ];
 
     if (usuario.tipo === 'admin' || usuario.tipo === 'gestor') {
       cards.push(
         { titulo: 'Cadastro de Usinas', descricao: 'Gerencie suas usinas', rota: 'usinascadastro.html' },
-        { titulo: 'Cadastro de Usuários', descricao: 'Adicione ou edite usuários', rota: 'usuarioscadastro.html' }
+        { titulo: 'Cadastro de Usuários', descricao: 'Adicione ou edite usuários', rota: 'cadastro.html' }
       );
     }
 
@@ -130,8 +133,7 @@
     });
   </script>
 
-  <!-- Só mostra se tiver 'podeAcessarAdministracao' -->
-  <a href="#" onclick="navigateTo('administracao.html')" data-permission="podeAcessarAdministracao" class="btn btn-info mt-3 ms-3" style="display: none;">Administração (Condicional)</a>
+
 
   <script>
     document.querySelectorAll('[data-permission]').forEach(el => {
@@ -182,40 +184,11 @@
     });
   </script>
 
-  <script type="module" src="../js/fetchProtectedData.js"></script> <!-- Caminho corrigido -->
+  <script type="module" src="/js/fetchProtectedData.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Função navigateTo para lidar com a navegação.
-    // Certifique-se que os caminhos passados são relativos à pasta 'pages' ou absolutos corretos.
     function navigateTo(path) {
-      // Se os caminhos em onclick já são nomes de arquivo como 'cadastro.html',
-      // e home.html está em /pages/, então path já é o nome do arquivo.
-      // Se path começar com '/', pode indicar um caminho absoluto do servidor,
-      // que pode não ser o desejado se estivermos navegando entre arquivos na mesma pasta.
-      // Para este caso, como os arquivos estão em 'pages', usar nomes de arquivo diretos é o mais simples.
       window.location.href = path;
-    }
-
-    // Função logout para o botão de sair.
-    function logout() {
-      localStorage.removeItem('token');
-      // Redireciona para a página de login, que está em /pages/login4w.html
-      window.location.href = 'login4w.html';
-    }
-
-    // Exemplo de como getUserPermissions pode ser (NECESSÁRIO IMPLEMENTAR CORRETAMENTE)
-    // Esta é uma função placeholder. Você precisa implementá-la para buscar
-    // as permissões reais do usuário, provavelmente do token JWT ou de uma API.
-    function getUserPermissions() {
-      const token = localStorage.getItem('token');
-      if (!token) return [];
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        return payload.permissions || [];
-      } catch (e) {
-        console.error("Erro ao obter permissões do token:", e);
-        return [];
-      }
     }
   </script>
 </body>
