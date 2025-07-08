@@ -48,7 +48,8 @@ app.use(helmet({
         "'sha256-FM7xFCwIjyIhANd8todDhv0/xn+4BcFa2vh+ZlE/9xA='", // Script chartVisaoGeral e toggleSection
         "'sha256-iU1ULDRgEVZ0xXtdBEJIZXe2/nn+zW3Tw06JI2q+MH0='", // Script chartResumoMensal
         "'sha256-d38ou+DoHii245vxodueH9vFqYwyjZK0KvUHoBltC2I='", // Script chartIndicadores
-        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='"  // Novo hash para administracao.html linha 255 (script module login check)
+        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Hash para administracao.html linha 255 (script module login check)
+        "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='"   // Hash para home.html linha 95 (script de cards)
       ],
       scriptSrcAttr: [
         "'self'",
