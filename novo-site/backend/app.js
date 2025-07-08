@@ -36,7 +36,8 @@ app.use(helmet({
         "https://cdn.jsdelivr.net",
         "https://cdn.datatables.net",
         "https://cdnjs.cloudflare.com",
-        "https://code.jquery.com"
+        "https://code.jquery.com",
+        "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='" // Hash para script inline em index.html
       ],
       // Adicionando script-src-attr para os handlers onclick
       // Idealmente, estes onlick seriam movidos para event listeners em JS
