@@ -1,0 +1,12 @@
+{
+  "name": "cadastramentos-de-usuarios",
+  "version": "1.0.0",
+  "description": "Sistema web para gestão de usuários, usinas e controle de acesso baseado em permissões, desenvolvido com **Node.js (Express)** no backend e **HTML/CSS/JavaScript** no frontend.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

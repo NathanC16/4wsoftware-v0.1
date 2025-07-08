@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dados dos Clientes - Ecossistema Energia</title>
+
+  <!-- Estilos DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"/>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('images/4wfazenda.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: rgba(33, 136, 56, 0.95);
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    main {
+      padding: 2em;
+      background-color: rgba(255, 255, 255, 0.95);
+      margin: 2em;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #218838;
+      margin-bottom: 1em;
+    }
+    table.dataTable thead {
+      background-color: #218838;
+      color: white;
+    }
+    .dt-button {
+      background-color: #28a745 !important;
+      color: white !important;
+      border: none !important;
+      padding: 0.5em 1em !important;
+      margin-right: 0.5em !important;
+      border-radius: 4px !important;
+      cursor: pointer;
+    }
+    .dt-button:hover {
+      background-color: #218838 !important;
+    }
+    #leadsTable_filter {
+      text-align: right;
+      margin-bottom: 1em;
+    }
+    #leadsTable_filter input {
+      padding: 0.4em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    td.editable {
+      cursor: pointer;
+    }
+    #editButton {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+
+    <h1> <img src="../images/4wlogo.jpg" alt="Logo" height="40"> Dados dos Clientes - 4W Ecossistema Energia</h1>
+  </header>
+
+  <main>
+    <h2> <img src="../assets/img/4wlogo.jpg" alt="Logo" height="40">  Lista de Dados dos Clientes</h2>
+    <button id="toggleTable" class="btn btn-success mb-3">Mostrar Tabela</button>
+    <table id="leadsTable" class="display nowrap" style="width:100%; display:none;">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Data de Cadastro</th>
+          <th>UC</th>
+          <th>CPF/CNPJ</th>
+          <th>Data de Nascimento</th>
+          <th>Usina</th>
+          <th>Modalidade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Gerado dinamicamente via script -->
+      </tbody>
+    </table>
+    <button id="editButton" class="btn btn-primary">Salvar Edições</button>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script>
+    <script type="module">
+    import { fetchProtectedData } from '../js/fetchProtectedData.js';
+
+    // Função para carregar os dados dos usuários do backend
+    async function carregarUsuarios() {
+      try {
+        // Usa a função auxiliar para buscar dados protegidos
+        const users = await fetchProtectedData('/api/usuarios');
+
+        // Mapeia os dados dos usuários para o formato esperado pelo DataTables
+        const dataTableData = users.map(user => [
+          user.nomeCompleto || user.usuario, // Usa nomeCompleto se existir, senão usuario
+          user.email,
+          user.telefone || '',
+          new Date(user.dataCadastro).toLocaleDateString('pt-BR'),
+          user.uc || '',
+          user.cpf || user.cnpj || '',
+          user.dataNascimento ? new Date(user.dataNascimento).toLocaleDateString('pt-BR') : '',
+          user.usina || '',
+          user.modalidade || '',
+          user.status || '',
+        ]);
+
+        // Inicializa o DataTables com os dados carregados
+        const table = $('#leadsTable').DataTable({
+          data: dataTableData,
+          columns: [
+            { title: "Nome" },
+            { title: "E-mail" },
+            { title: "Telefone" },
+            { title: "Data de Cadastro" },
+            { title: "UC" },
+            { title: "CPF/CNPJ" },
+            { title: "Data de Nascimento" },
+            { title: "Usina" },
+            { title: "Modalidade" },
+            { title: "Status" }
+          ],
+          createdRow: function(row) {
+            $('td', row).addClass('editable');
+          },
+          pageLength: 55,
+          dom: 'Bfrtip',
+          buttons: [
+            {
+              extend: 'excelHtml5',
+              text: 'Exportar para Excel',
+              title: 'Dados_Clientes_4W'
+            },
+            {
+              extend: 'pdfHtml5',
+              text: 'Exportar para PDF',
+              title: 'Dados_Clientes_4W',
+              orientation: 'portrait',
+              pageSize: 'A4'
+            }
+          ],
+          language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+          }
+        });
+
+        // Eventos de edição da tabela
+        $('#leadsTable tbody').on('click', 'td.editable', function () {
+          const cell = table.cell(this);
+          const original = cell.data();
+          const input = $('<input type="text" class="form-control" />').val(original);
+          $(this).html(input);
+          input.focus();
+          $('#editButton').show();
+          input.blur(function () {
+            cell.data(input.val()).draw();
+          });
+        });
+
+        // Torna a tabela visível após o carregamento dos dados
+        $('#leadsTable').show();
+        $('#toggleTable').text('Ocultar Tabela');
+
+      } catch (err) {
+        console.error('Erro ao carregar usuários:', err);
+        alert('Erro ao carregar dados dos clientes: ' + err.message);
+      }
+    }
+
+    // Evento para alternar a visibilidade da tabela
+    $(document).ready(function () {
+      $('#toggleTable').on('click', function () {
+        $('#leadsTable').toggle();
+        $(this).text($('#leadsTable').is(':visible') ? 'Ocultar Tabela' : 'Mostrar Tabela');
+      });
+
+      $('#editButton').on('click', function () {
+        alert('Alterações salvas com sucesso!');
+        $(this).hide();
+      });
+
+      // Carrega os usuários quando a página estiver pronta
+      carregarUsuarios();
+    });
+
+    // Funções para edição individual de usuário (se aplicável)
+    function obterIdDoUsuario() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    async function salvarAlteracoes() {
+      const id = obterIdDoUsuario();
+      const usuario = document.getElementById('usuario').value;
+      // Implemente a lógica para pegar permissões do formulário
+      const permissoes = []; 
+
+      try {
+        const response = await fetchProtectedData(`/api/usuarios/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ usuario, permissoes })
+        });
+        if (!response.ok) throw new Error('Erro ao salvar alterações do usuário.');
+        alert('Usuário atualizado com sucesso!');
+      } catch (err) {
+        console.error('Erro ao salvar alterações:', err);
+        alert('Erro ao salvar alterações do usuário: ' + err.message);
+      }
+    }
+
+    async function carregarUsuarioParaEdicao() {
+      const id = obterIdDoUsuario();
+      try {
+        const user = await fetchProtectedData(`/api/usuarios/${id}`);
+        document.getElementById('usuario').value = user.usuario;
+        // Preencha o formulário com as permissões também, se houver um formulário de edição
+      } catch (err) {
+        console.error('Erro ao carregar usuário para edição:', err);
+        alert('Erro ao carregar dados do usuário para edição: ' + err.message);
+      }
+    }
+
+    // Exemplo de como chamar a função de carregamento para edição, se necessário
+    // window.onload = carregarUsuarioParaEdicao;
+  </script>
+  
+</body>
+</html>

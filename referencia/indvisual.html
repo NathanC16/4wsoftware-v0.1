@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cliente - Detalhes</title>
+  
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #218838;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+
+    main {
+      padding: 2em;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      color: #218838;
+      margin-bottom: 1.5em;
+    }
+
+    .dados-container {
+      background-color: white;
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .campo {
+      margin-bottom: 1em;
+    }
+
+    .campo label {
+      display: block;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.3em;
+    }
+
+    .campo span, .campo input {
+      display: block;
+      width: 100%;
+    }
+
+    .campo input {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 0.75em 1.5em;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    .acoes {
+      text-align: right;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Detalhes do Cliente</h1> 
+     <nav>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link" href="/index.html#hero">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="/visualizador-individual.html">Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="/user.dados.html">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link" href="/cadastro-usina-coop.html">Cadastro Usina</a></li>
+        <li class="nav-item"><a class="nav-link" href="/admistracao.html">Administração</a></li>
+        <li class="nav-item"><a class="nav-link" href="/login4w.html">Sair</a></li>
+      </ul>
+    </nav>
+  
+  </header>
+
+  <main>
+    <div class="dados-container" id="viewSection">
+      <h2>Informações</h2>
+      <div class="campo"><label>ID</label><span id="idView"></span></div>
+      <div class="campo"><label>Nome</label><span id="nomeView"></span></div>
+      <div class="campo"><label>UC</label><span id="ucView"></span></div>
+      <div class="campo"><label>Contrato</label><span id="contratoView"></span></div>
+      <div class="campo"><label>Usina</label><span id="usinaView"></span></div>
+      <div class="campo"><label>Modalidade</label><span id="modalidadeView"></span></div>
+      <div class="campo"><label>Parceiro</label><span id="parceiroView"></span></div>
+      <div class="campo"><label>Contrato Parceiro</label><span id="contratoParceiroView"></span></div>
+      <div class="campo"><label>Desconto</label><span id="descontoView"></span></div>
+      <div class="campo"><label>Email</label><span id="emailView"></span></div>
+    </div>
+
+    <div class="dados-container" style="margin-top: 2em;">
+      <h2>Editar Informações</h2>
+      <div class="campo"><label for="idEdit">ID</label><input id="idEdit" /></div>
+      <div class="campo"><label for="nomeEdit">Nome</label><input id="nomeEdit" /></div>
+      <div class="campo"><label for="ucEdit">UC</label><input id="ucEdit" /></div>
+      <div class="campo"><label for="contratoEdit">Contrato</label><input id="contratoEdit" /></div>
+      <div class="campo"><label for="usinaEdit">Usina</label><input id="usinaEdit" /></div>
+      <div class="campo"><label for="modalidadeEdit">Modalidade</label><input id="modalidadeEdit" /></div>
+      <div class="campo"><label for="parceiroEdit">Parceiro</label><input id="parceiroEdit" /></div>
+      <div class="campo"><label for="contratoParceiroEdit">Contrato Parceiro</label><input id="contratoParceiroEdit" /></div>
+      <div class="campo"><label for="descontoEdit">Desconto</label><input id="descontoEdit" /></div>
+      <div class="campo"><label for="emailEdit">Email</label><input id="emailEdit" /></div>
+
+      <div class="acoes">
+        <button onclick="salvarAlteracoes()">Salvar Alterações</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const clienteId = '12345';
+
+    async function carregarDados() {
+      try {
+        const resposta = await fetch(`/api/clientes/${clienteId}`);
+        const dados = await resposta.json();
+        if (!resposta.ok) throw new Error(dados.mensagem || 'Erro ao buscar cliente.');
+
+        document.getElementById('nomeView').innerText = dados.nome;
+        document.getElementById('idView').innerText = dados.id;
+        document.getElementById('ucView').innerText = dados.uc;
+        document.getElementById('contratoView').innerText = dados.contrato;
+        document.getElementById('usinaView').innerText = dados.usina;
+        document.getElementById('modalidadeView').innerText = dados.modalidade;
+        document.getElementById('parceiroView').innerText = dados.parceiro;
+        document.getElementById('contratoParceiroView').innerText = dados.contratoParceiro;
+        document.getElementById('descontoView').innerText = dados.desconto + '%';
+        document.getElementById('emailView').innerText = dados.email;
+
+        document.getElementById('nomeEdit').value = dados.nome;
+        document.getElementById('idEdit').value = dados.id;
+        document.getElementById('ucEdit').value = dados.uc;
+        document.getElementById('contratoEdit').value = dados.contrato;
+        document.getElementById('usinaEdit').value = dados.usina;
+        document.getElementById('modalidadeEdit').value = dados.modalidade;
+        document.getElementById('parceiroEdit').value = dados.parceiro;
+        document.getElementById('contratoParceiroEdit').value = dados.contratoParceiro;
+        document.getElementById('descontoEdit').value = dados.desconto;
+        document.getElementById('emailEdit').value = dados.email;
+      } catch (erro) {
+        alert('Erro ao carregar dados: ' + erro.message);
+      }
+    }
+
+    async function salvarAlteracoes() {
+      const dadosAtualizados = {
+        nome: document.getElementById('nomeEdit').value,
+        id: document.getElementById('idEdit').value,
+        uc: document.getElementById('ucEdit').value,
+        contrato: document.getElementById('contratoEdit').value,
+        usina: document.getElementById('usinaEdit').value,
+        modalidade: document.getElementById('modalidadeEdit').value,
+        parceiro: document.getElementById('parceiroEdit').value,
+        contratoParceiro: document.getElementById('contratoParceiroEdit').value,
+        desconto: parseFloat(document.getElementById('descontoEdit').value),
+        email: document.getElementById('emailEdit').value
+      };
+
+      try {
+        const resposta = await fetch(`/api/clientes/${clienteId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dadosAtualizados)
+        });
+
+        const dados = await resposta.json();
+        if (!resposta.ok) throw new Error(dados.mensagem || 'Erro ao atualizar.');
+
+        alert('Dados atualizados com sucesso!');
+        carregarDados();
+      } catch (erro) {
+        alert('Erro ao salvar: ' + erro.message);
+      }
+    }
+
+    window.onload = carregarDados;
+  </script>
+ <script src="scripts/sidebar.js"></script>
+
+</body>
+</html>

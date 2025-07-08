@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dados dos Clientes - Ecossistema Energia</title>
+
+  <!-- Estilos DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"/>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('images/4wfazenda.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: rgba(33, 136, 56, 0.95);
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    main {
+      padding: 2em;
+      background-color: rgba(255, 255, 255, 0.95);
+      margin: 2em;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #218838;
+      margin-bottom: 1em;
+    }
+    table.dataTable thead {
+      background-color: #218838;
+      color: white;
+    }
+    .dt-button {
+      background-color: #28a745 !important;
+      color: white !important;
+      border: none !important;
+      padding: 0.5em 1em !important;
+      margin-right: 0.5em !important;
+      border-radius: 4px !important;
+      cursor: pointer;
+    }
+    .dt-button:hover {
+      background-color: #218838 !important;
+    }
+    #leadsTable_filter {
+      text-align: right;
+      margin-bottom: 1em;
+    }
+    #leadsTable_filter input {
+      padding: 0.4em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    td.editable {
+      cursor: pointer;
+    }
+    #editButton {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+
+    <h1> <img src="../images/4wlogo.jpg" alt="Logo" height="40"> Dados dos Clientes - 4W Ecossistema Energia</h1>
+  </header>
+
+  <main>
+    <h2> <img src="../images/4wlogo.jpg" alt="Logo" height="40">  Lista de Dados dos Clientes</h2>
+    <button id="toggleTable" class="btn btn-success mb-3">Mostrar Tabela</button>
+    <table id="leadsTable" class="display nowrap" style="width:100%; display:none;">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Data de Cadastro</th>
+          <th>UC</th>
+          <th>CPF/CNPJ</th>
+          <th>Data de Nascimento</th>
+          <th>Usina</th>
+          <th>Modalidade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Gerado dinamicamente via script -->
+      </tbody>
+    </table>
+    <button id="editButton" class="btn btn-primary">Salvar Edições</button>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script>
+    const nomes = ["João Silva", "Maria Oliveira", "Carlos Souza", "Ana Paula", "Felipe Costa"];
+    const emails = ["joao.silva", "maria.oliveira", "carlos.souza", "ana.paula", "felipe.costa"];
+    const telefones = ["91234-5678", "98765-4321", "99887-6655", "91111-2222", "98888-7777"];
+    const status = ["Contato Inicial", "Proposta Enviada", "Negociação", "Fechado", "Cancelado"];
+    const modalidades = ["Autoconsumo", "Compartilhada"];
+    const usinas = ["Usina Norte", "Usina Centro", "Usina Sul"];
+
+    function gerarDadosClientes(qtd) {
+      const dados = [];
+      for (let i = 0; i < qtd; i++) {
+        const nome = nomes[i % nomes.length];
+        const email = `${emails[i % emails.length]}${i}@example.com`;
+        const telefone = `(62) ${telefones[i % telefones.length]}`;
+        const dataCadastro = new Date(2025, 5, 1 + (i % 30)).toISOString().split('T')[0];
+        const uc = `UC${100000 + i}`;
+        const cpfcnpj = i % 2 === 0 ? `000.000.000-0${i % 9}` : `00.000.000/0000-0${i % 9}`;
+        const nascimento = `199${i % 10}-0${(i % 12) + 1}-15`;
+        const usina = usinas[i % usinas.length];
+        const modalidade = modalidades[i % modalidades.length];
+        const stat = status[i % status.length];
+        dados.push([nome, email, telefone, dataCadastro, uc, cpfcnpj, nascimento, usina, modalidade, stat]); 
+        async function carregarUsuarios() {
+  try {
+    const response = await fetch('/users', {
+      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+    });
+    if (!response.ok) throw new Error('Erro ao buscar usuários');
+    const users = await response.json();
+
+    const tabela = document.getElementById('tabela-usuarios');
+    tabela.innerHTML = ''; // limpa antes
+
+    users.forEach(user => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${user.usuario}</td>
+        <td>${user.permissoes.join(', ')}</td>
+        <td><button onclick="editarUsuario('${user._id}')">Editar</button></td>
+        <button onclick="window.location.href = 'individual.html?id=USER_ID_AQUI'">Editar</button>
+
+      `;
+      tabela.appendChild(tr);
+    });
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+window.onload = carregarUsuarios;
+
+      }
+      return dados;
+    }
+
+    $(document).ready(function () {
+      const table = $('#leadsTable').DataTable({
+        data: gerarDadosClientes(251),
+        columns: [
+          { title: "Nome" },
+          { title: "E-mail" },
+          { title: "Telefone" },
+          { title: "Data de Cadastro" },
+          { title: "UC" },
+          { title: "CPF/CNPJ" },
+          { title: "Data de Nascimento" },
+          { title: "Usina" },
+          { title: "Modalidade" },
+          { title: "Status" }
+        ],
+        createdRow: function(row) {
+          $('td', row).addClass('editable');
+        },
+        pageLength: 55,
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'excelHtml5',
+            text: 'Exportar para Excel',
+            title: 'Dados_Clientes_4W'
+          },
+          {
+            extend: 'pdfHtml5',
+            text: 'Exportar para PDF',
+            title: 'Dados_Clientes_4W',
+            orientation: 'portrait',
+            pageSize: 'A4'
+          }
+        ],
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+        }
+      });
+
+      $('#leadsTable tbody').on('click', 'td.editable', function () {
+        const cell = table.cell(this);
+        const original = cell.data();
+        const input = $('<input type="text" class="form-control" />').val(original);
+        $(this).html(input);
+        input.focus();
+        $('#editButton').show();
+        input.blur(function () {
+          cell.data(input.val()).draw();
+        });
+      });
+
+      $('#toggleTable').on('click', function () {
+        $('#leadsTable').toggle();
+        $(this).text($('#leadsTable').is(':visible') ? 'Ocultar Tabela' : 'Mostrar Tabela');
+      });
+
+      $('#editButton').on('click', function () {
+        alert('Alterações salvas com sucesso!');
+        $(this).hide();
+      });
+    });  
+    function obterIdDoUsuario() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+    async function salvarAlteracoes() {
+      const id = obterIdDoUsuario();
+      const usuario = document.getElementById('usuario').value;
+      const permissoes = pegarPermissoesDoFormulario(); // implemente conforme seu formulário
+
+      try {
+        const response = await fetch(`/users/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({ usuario, permissoes })
+        });
+        if (!response.ok) throw new Error('Erro ao salvar');
+        alert('Usuário atualizado com sucesso!');
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function carregarUsuario() {
+      const id = obterIdDoUsuario();
+      const response = await fetch(`/users/${id}`, {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      const user = await response.json();
+
+      document.getElementById('usuario').value = user.usuario;
+      // preencha o formulário com as permissões também
+    }
+
+    window.onload = carregarUsuario;
+  </script>
+  
+</body>
+</html>

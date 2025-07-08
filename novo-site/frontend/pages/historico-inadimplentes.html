@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Histórico de Inadimplentes</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #00ffff;
+      color: #111;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    button:hover {
+      background-color: #00dddd;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background-color: #1a1a1a;
+      box-shadow: 0 0 15px #00ffff55;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #444;
+    }
+
+    th {
+      background-color: #222;
+      color: #00ffff;
+    }
+
+    td {
+      color: #ddd;
+    }
+
+    .obs {
+      font-style: italic;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Histórico de Inadimplentes</h1>
+
+  <div class="btn-container">
+    <button onclick="exportarExcel()">📥 Baixar Excel</button>
+    <button onclick="exportarPDF()">📄 Baixar PDF</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>UC</th>
+        <th>Nome</th>
+        <th>CPF/CNPJ</th>
+        <th>Mês</th>
+        <th>KWh</th>
+        <th>Valor (R$)</th>
+        <th>Pago (R$)</th>
+        <th>Status</th>
+        <th>Data Pagamento</th>
+        <th>Pagou Juros?</th>
+        <th>Refaturado?</th>
+        <th>Obs. Financeiro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Os dados são exemplos fictícios -->
+      <tr>
+        <td>UC001234</td>
+        <td>João Silva</td>
+        <td>123.456.789-00</td>
+        <td>Janeiro/2025</td>
+        <td>420</td>
+        <td>280,00</td>
+        <td>0,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>-</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Aguardando retorno do cliente</td>
+      </tr>
+      <tr>
+        <td>UC001234</td>
+        <td>João Silva</td>
+        <td>123.456.789-00</td>
+        <td>Fevereiro/2025</td>
+        <td>390</td>
+        <td>260,00</td>
+        <td>260,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>15/03/2025</td>
+        <td>Sim</td>
+        <td>Sim</td>
+        <td class="obs">Pago com 5% de multa</td>
+      </tr>
+      <tr>
+        <td>UC009876</td>
+        <td>Ana Costa</td>
+        <td>987.654.321-00</td>
+        <td>Janeiro/2025</td>
+        <td>350</td>
+        <td>245,00</td>
+        <td>245,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>20/02/2025</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Pagamento fora do prazo</td>
+      </tr>
+      <tr>
+        <td>UC004321</td>
+        <td>Lucas Pereira</td>
+        <td>01.234.567/0001-89</td>
+        <td>Março/2025</td>
+        <td>520</td>
+        <td>364,00</td>
+        <td>0,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>-</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Sem retorno desde 10/03</td>
+      </tr>
+      <tr>
+        <td>UC007777</td>
+        <td>Maria Souza</td>
+        <td>789.456.123-00</td>
+        <td>Abril/2025</td>
+        <td>610</td>
+        <td>427,00</td>
+        <td>427,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>10/05/2025</td>
+        <td>Sim</td>
+        <td>Sim</td>
+        <td class="obs">Refaturado com correção</td>
+      </tr>
+      <tr>
+        <td>UC008888</td>
+        <td>Empresa XYZ LTDA</td>
+        <td>12.345.678/0001-22</td>
+        <td>Maio/2025</td>
+        <td>950</td>
+        <td>665,00</td>
+        <td>0,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>-</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Solicitado parcelamento</td>
+      </tr>
+      <tr>
+        <td>UC003333</td>
+        <td>Felipe Lima</td>
+        <td>321.654.987-00</td>
+        <td>Fevereiro/2025</td>
+        <td>480</td>
+        <td>336,00</td>
+        <td>336,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>28/03/2025</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Pagamento no último dia</td>
+      </tr>
+      <tr>
+        <td>UC005555</td>
+        <td>Bruna Rocha</td>
+        <td>456.789.123-00</td>
+        <td>Janeiro/2025</td>
+        <td>300</td>
+        <td>210,00</td>
+        <td>0,00</td>
+        <td style="color:#ff4444;">Inadimplente</td>
+        <td>-</td>
+        <td>Não</td>
+        <td>Não</td>
+        <td class="obs">Contato agendado para 15/03</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function exportarExcel() {
+      alert('⚠️ Exportar para Excel ainda precisa ser implementado!');
+      // Aqui você pode usar XLSX.js ou SheetJS depois
+    }
+
+    function exportarPDF() {
+      alert('⚠️ Exportar para PDF ainda precisa ser implementado!');
+      // Ex: usar jsPDF + html2canvas
+    }
+  </script>
+
+</body>
+</html>

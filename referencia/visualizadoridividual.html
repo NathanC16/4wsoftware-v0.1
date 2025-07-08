@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cliente - Detalhes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('images/hidroeletrica.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #218838;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    main {
+      padding: 2em;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h2 {
+      color: #218838;
+      margin-bottom: 1.5em;
+    }
+    .dados-container {
+      background-color: white;
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .campo {
+      margin-bottom: 1em;
+    }
+    .campo label {
+      display: block;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.3em;
+    }
+    .campo span, .campo input {
+      display: block;
+      width: 100%;
+    }
+    .campo input {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 0.75em 1.5em;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .acoes {
+      text-align: right;
+      margin-top: 2em;
+    }
+    #editSection {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><img src="../images/4wlogo.jpg" alt="Logo" height="40"> Detalhes do Cliente</h1>
+  </header>
+  <main>
+    <div class="dados-container" id="viewSection">
+      <h2>Informações</h2>
+      <div class="campo"><label>ID</label><span id="idView"></span></div>
+      <div class="campo"><label>Nome</label><span id="nomeView"></span></div>
+      <div class="campo"><label>UC</label><span id="ucView"></span></div>
+      <div class="campo"><label>Contrato</label><span id="contratoView"></span></div>
+      <div class="campo"><label>Usina</label><span id="usinaView"></span></div>
+      <div class="campo"><label>Modalidade</label><span id="modalidadeView"></span></div>
+      <div class="campo"><label>Parceiro</label><span id="parceiroView"></span></div>
+      <div class="campo"><label>Contrato Parceiro</label><span id="contratoParceiroView"></span></div>
+      <div class="campo"><label>Desconto</label><span id="descontoView"></span></div>
+      <div class="campo"><label>Email</label><span id="emailView"></span></div>
+      <div class="acoes">
+        <button onclick="mostrarEdicao()">Editar</button>
+      </div>
+    </div>
+    <div class="dados-container" id="editSection" style="margin-top: 2em;">
+      <h2>Editar Informações</h2>
+      <div class="campo"><label for="idEdit">ID</label><input id="idEdit" /></div>
+      <div class="campo"><label for="nomeEdit">Nome</label><input id="nomeEdit" /></div>
+      <div class="campo"><label for="ucEdit">UC</label><input id="ucEdit" /></div>
+      <div class="campo"><label for="contratoEdit">Contrato</label><input id="contratoEdit" /></div>
+      <div class="campo"><label for="usinaEdit">Usina</label><input id="usinaEdit" /></div>
+      <div class="campo"><label for="modalidadeEdit">Modalidade</label><input id="modalidadeEdit" /></div>
+      <div class="campo"><label for="parceiroEdit">Parceiro</label><input id="parceiroEdit" /></div>
+      <div class="campo"><label for="contratoParceiroEdit">Contrato Parceiro</label><input id="contratoParceiroEdit" /></div>
+      <div class="campo"><label for="descontoEdit">Desconto</label><input id="descontoEdit" /></div>
+      <div class="campo"><label for="emailEdit">Email</label><input id="emailEdit" /></div>
+      <div class="acoes">
+        <button onclick="salvarAlteracoes()">Salvar Alterações</button>
+        <button onclick="cancelarEdicao()" style="margin-left: 1em; background-color: #6c757d;">Cancelar</button>
+      </div>
+    </div>
+  </main>
+  <script> 
+  // Pega o id do usuário da URL
+function obterIdDoUsuario() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+
+// Função para salvar alterações
+async function salvarAlteracoes() {
+  const id = obterIdDoUsuario();
+  const usuario = document.getElementById('usuario').value;
+  const permissoes = pegarPermissoesDoFormulario(); // implemente conforme seu formulário
+
+  try {
+    const response = await fetch(`/users/${id}`, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+      body: JSON.stringify({ usuario, permissoes })
+    });
+    if (!response.ok) throw new Error('Erro ao salvar');
+    alert('Usuário atualizado com sucesso!');
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// Também pode carregar os dados do usuário ao carregar a página
+async function carregarUsuario() {
+  const id = obterIdDoUsuario();
+  const response = await fetch(`/users/${id}`, {
+    headers: {
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
+    }
+  });
+  const user = await response.json();
+
+  document.getElementById('usuario').value = user.usuario;
+  // preencha o formulário com as permissões também
+}
+
+window.onload = carregarUsuario;
+
+    const clienteId = '12345';
+
+    async function carregarDados() {
+      try {
+        const resposta = await fetch(`/api/clientes/${clienteId}`);
+        const dados = await resposta.json();
+        if (!resposta.ok) throw new Error(dados.mensagem || 'Erro ao buscar cliente.');
+
+        const campos = ['id', 'nome', 'uc', 'contrato', 'usina', 'modalidade', 'parceiro', 'contratoParceiro', 'desconto', 'email'];
+
+        campos.forEach(campo => {
+          document.getElementById(`${campo}View`).innerText = campo === 'desconto' ? dados[campo] + '%' : dados[campo];
+          document.getElementById(`${campo}Edit`).value = dados[campo];
+        });
+
+      } catch (erro) {
+        alert('Erro ao carregar dados: ' + erro.message);
+      }
+    }
+
+    async function salvarAlteracoes() {
+      const campos = ['id', 'nome', 'uc', 'contrato', 'usina', 'modalidade', 'parceiro', 'contratoParceiro', 'desconto', 'email'];
+      const dadosAtualizados = {};
+      campos.forEach(campo => {
+        dadosAtualizados[campo] = document.getElementById(`${campo}Edit`).value;
+      });
+
+      try {
+        const resposta = await fetch(`/api/clientes/${clienteId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dadosAtualizados)
+        });
+
+        const dados = await resposta.json();
+        if (!resposta.ok) throw new Error(dados.mensagem || 'Erro ao atualizar.');
+
+        alert('Dados atualizados com sucesso!');
+        document.getElementById('editSection').style.display = 'none';
+        carregarDados();
+      } catch (erro) {
+        alert('Erro ao salvar: ' + erro.message);
+      }
+    }
+
+    function mostrarEdicao() {
+      document.getElementById('editSection').style.display = 'block';
+      document.getElementById('viewSection').style.display = 'none';
+    }
+
+    function cancelarEdicao() {
+      document.getElementById('editSection').style.display = 'none';
+      document.getElementById('viewSection').style.display = 'block';
+    }
+
+    window.onload = carregarDados;
+  </script>
+  
+</body>
+</html>
