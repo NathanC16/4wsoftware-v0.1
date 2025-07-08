@@ -43,7 +43,11 @@ app.use(helmet({
         "'sha256-2hxGndJiWVIMkmvBSka4n+eGJeaDd0EZvxtzJvgRcjA='", // script data-permission
         "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info
         "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav
-        "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='"  // script navigateTo, logout, getUserPermissions
+        "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // script navigateTo, logout, getUserPermissions
+        // Hashes para scripts inline em administracao.html
+        "'sha256-FM7xFCwIjyIhANd8todDhv0/xn+4BcFa2vh+ZlE/9xA='",
+        "'sha256-iU1ULDRgEVZ0xXtdBEJIZXe2/nn+zW3Tw06JI2q+MH0='",
+        "'sha256-d38ou+DoHii245vxodueH9vFqYwyjZK0KvUHoBltC2I='"
       ],
       scriptSrcAttr: [
         "'self'",

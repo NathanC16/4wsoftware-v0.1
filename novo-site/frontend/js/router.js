@@ -50,13 +50,16 @@ function isAuthenticated() {
   const token = localStorage.getItem('token');
   return token && !isTokenExpired(token);
 }
-const token = localStorage.getItem('token');
-if (!token || isTokenExpired(token)) {
-  localStorage.removeItem('token');
-  if (path !== '/') {
-    return navigateTo('/');
-  }
-}
+
+// O bloco abaixo estava causando "Illegal return statement" e era redundante/mal colocado.
+// A lógica de verificação de token e redirecionamento principal está em loadPage.
+// const token = localStorage.getItem('token');
+// if (!token || isTokenExpired(token)) {
+//   localStorage.removeItem('token');
+//   if (path !== '/') { // 'path' não está definido neste escopo global
+//     return navigateTo('/');
+//   }
+// }
 
 // ✅ Verifica se o token expirou
 function isTokenExpired(token) {
