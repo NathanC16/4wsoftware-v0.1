@@ -100,7 +100,7 @@ import usuariosRoutes from './routes/usuarios.js';
 import cooperativaRoutes from './routes/cooperativaRoutes.js';
 import turbinaRoutes from './routes/turbinaRoutes.js';
 import usinaRoutes from './routes/usinaRoutes.js';
-import rotaSimples from './routes/testeSimples.js';
+// import rotaSimples from './routes/testeSimples.js'; // Removido pois o arquivo foi deletado
 
 // Importação de utilitários e modelos
 import { criarUsuariosPadrao } from './utils/criarUsuariosPadrao.js';
@@ -115,7 +115,7 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/cooperativas', cooperativaRoutes);
 app.use('/api/turbinas', turbinaRoutes);
 app.use('/api/usinas', usinaRoutes);
-app.use('/api/teste', rotaSimples);
+// app.use('/api/teste', rotaSimples); // Removido pois o arquivo foi deletado
 
 // Rota para a página inicial do frontend
 app.get('/', (req, res) => {
