@@ -48,10 +48,27 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' });
 
     console.log('Token gerado com sucesso. Login bem-sucedido.');
+
+    // Define o destino de redirecionamento com base nas permissões do usuário
+    let destino = '/pages/home.html'; // Destino padrão
+    if (user.permissoes.includes('admin')) {
+      // No novo-site, a página de administração principal que estamos considerando é 'administracao.html'
+      // O home.html da referência também aponta para 'administracao.html' para o dashboard/admin.
+      destino = '/pages/administracao.html';
+    } else if (user.permissoes.includes('financeiro')) {
+      // Supondo que haverá uma página para financeiro. Se não, ajustar ou remover.
+      destino = '/pages/financeiro.html'; // TODO: Confirmar ou criar esta página
+    } else if (user.permissoes.includes('leitura')) {
+      // 'visualizadoridividual.html' existe na referência e parece adequado.
+      destino = '/pages/visualizadoridividual.html';
+    }
+    // Outros papéis podem continuar usando o /pages/home.html padrão ou ter seus próprios destinos.
+
     res.status(200).json({
       token,
-      destino: '/pages/home.html', // Redirecionamento padrão após o login
-      usuario: user.usuario
+      destino: destino,
+      usuario: user.usuario,
+      permissoes: user.permissoes // É bom retornar as permissões para o frontend
     });
   } catch (error) {
     console.error('Erro no processo de login:', error);
