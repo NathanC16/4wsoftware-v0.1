@@ -1,39 +1,71 @@
-const express = require('express');
-const router = express.Router();
-const Usuario = require('../models/Usuario');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// novo-site/frontend/assets/js/auth.js
 
-// POST /login
-router.post('/login', async (req, res) => {
-  const { email, senha } = req.body;
-
-  if (!email || !senha) {
-    return res.status(400).json({ mensagem: 'E-mail e senha são obrigatórios.' });
-  }
-
+// Função para realizar o login
+export async function login(usuario, senha) {
   try {
-    const usuario = await Usuario.findOne({ email });
-    if (!usuario) {
-      return res.status(404).json({ mensagem: 'Usuário não encontrado.' });
+    const response = await fetch('/api/auth/login', { // Endpoint correto do backend
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ usuario, senha }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.token) {
+      localStorage.setItem('token', data.token);
+      if (data.usuario) { // Armazena o nome de usuário se disponível
+        localStorage.setItem('loggedInUser', data.usuario);
+      }
+      if (data.permissoes) { // Armazena permissões se disponíveis
+        localStorage.setItem('userPermissions', JSON.stringify(data.permissoes));
+      }
+      return { success: true, destino: data.destino || '/pages/home.html' };
+    } else {
+      return { success: false, message: data.mensagem || 'Erro no login.' };
     }
-
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaValida) {
-      return res.status(401).json({ mensagem: 'Senha incorreta.' });
-    }
-
-    const token = jwt.sign(
-      { id: usuario._id, email: usuario.email, tipo: usuario.tipoUsuario },
-      process.env.JWT_SECRET,
-      { expiresIn: '8h' }
-    );
-
-    res.json({ token });
   } catch (error) {
-    console.error('Erro ao fazer login:', error);
-    res.status(500).json({ mensagem: 'Erro interno ao fazer login.' });
+    console.error('Erro ao tentar fazer login:', error);
+    return { success: false, message: 'Erro de conexão ou servidor.' };
   }
-});
+}
 
-module.exports = router;
+// Função para realizar o logout
+export function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('loggedInUser');
+  localStorage.removeItem('userPermissions');
+  // Redireciona para a página de login, que está em /pages/login4w.html
+  // Ajuste o caminho se a página de login estiver em outro local.
+  window.location.href = '/pages/login4w.html';
+}
+
+// Função para verificar se o usuário está logado
+export function isLoggedIn() {
+  const token = localStorage.getItem('token');
+  // Adicionar futuramente: verificar se o token não expirou
+  return !!token;
+}
+
+// Função para obter o token armazenado
+export function getToken() {
+  return localStorage.getItem('token');
+}
+
+// Função para obter o nome do usuário logado
+export function getLoggedInUser() {
+  return localStorage.getItem('loggedInUser');
+}
+
+// Função para obter as permissões do usuário logado
+// ESTA FUNÇÃO DEVE SER USADA NO LUGAR DA SIMULAÇÃO EM home.html e outros lugares
+export function getUserPermissions() {
+  const permissions = localStorage.getItem('userPermissions');
+  try {
+    return permissions ? JSON.parse(permissions) : [];
+  } catch (e) {
+    console.error('Erro ao parsear permissões do localStorage:', e);
+    return [];
+  }
+}
