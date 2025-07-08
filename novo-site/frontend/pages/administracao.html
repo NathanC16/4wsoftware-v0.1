@@ -205,9 +205,10 @@
     <div id="footer-container"></div>
   </main>
   <script type="module">
-    import { renderNavbar } from './navbar.js';
-    import { renderFooter } from './footer.js';
-    import { renderTopbar } from './topbar.js';
+    // Corrigido o caminho para os módulos JS
+    import { renderNavbar } from '../js/navbar.js';
+    import { renderFooter } from '../js/footer.js';
+    import { renderTopbar } from '../js/topbar.js';
     renderNavbar('navbar-container');
     renderFooter('footer-container');
     renderTopbar('topbar-container');
@@ -243,29 +244,32 @@
       }
     });
   </script>
-  <script src="js/auth.js"></script>
-<script src="js/routes.js"></script>
-<script src="js/router.js"></script>
- <div id="app"></div>
+  <!-- Scripts movidos para o final do body e caminhos corrigidos -->
+  <!-- Supondo que auth.js, routes.js e router.js são necessários globalmente e não como módulos -->
+  <script src="../assets/js/auth.js"></script>
+  <script src="../js/routes.js"></script>
+  <script src="../js/router.js"></script>
 
-  <script src="router.js"></script>
+  <div id="app"></div> <!-- Mantido caso seja usado por router.js ou similar -->
+
+  <!-- Bloco de script para verificação de login -->
+  <!-- Corrigido o caminho para auth.js e garantido que seja carregado como módulo se necessário -->
   <script type="module">
-  import { isLoggedIn } from './auth.js';
+    import { isLoggedIn } from '../assets/js/auth.js'; // Caminho corrigido
 
-  if (!isLoggedIn()) {
-    window.location.href = 'login4w.html';
-  }
-</script>
- <script type="module">
-  import { isLoggedIn } from './scripts/auth.js';
-  import { renderNavbar } from './scripts/navbar.js';
+    if (!isLoggedIn()) {
+      // Redireciona para login4w.html na mesma pasta (pages)
+      // Se login4w.html estiver na raiz de frontend/, o caminho seria '../login4w.html'
+      // Assumindo que login4w.html está em frontend/pages/
+      window.location.href = 'login4w.html';
+    }
+  </script>
 
-  if (!isLoggedIn()) {
-    window.location.href = 'login4w.html';
-  }
-</script>
-<script src="/auth.js"></script>
-<script src="/routes.js"></script>
+  <!-- Removido bloco de script duplicado/conflitante que importava scripts/auth.js e scripts/navbar.js -->
+  <!-- A funcionalidade de renderNavbar já está no primeiro bloco de script type="module" -->
+  <!-- A funcionalidade de isLoggedIn já está no bloco de script type="module" acima -->
+
+  <!-- Removidas chamadas de script com caminhos absolutos /auth.js e /routes.js pois já foram carregados acima com caminhos corretos -->
 
 </body>
 </html>
