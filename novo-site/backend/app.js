@@ -37,25 +37,25 @@ app.use(helmet({
         "https://cdn.datatables.net",
         "https://cdnjs.cloudflare.com",
         "https://code.jquery.com",
-        "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='" // Hash para script inline em index.html
+        "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='", // Hash para script inline em index.html
+        // Hashes para scripts inline em home.html
+        "'sha256-Ikq0WQqbkcIVDAlUqYb/LPNieogAAf9WCReiPkZrt00='", // script cards
+        "'sha256-2hxGndJiWVIMkmvBSka4n+eGJeaDd0EZvxtzJvgRcjA='", // script data-permission
+        "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info
+        "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav
+        "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='"  // script navigateTo, logout, getUserPermissions
       ],
-      // Adicionando script-src-attr para os handlers onclick
-      // Idealmente, estes onlick seriam movidos para event listeners em JS
       scriptSrcAttr: [
         "'self'",
-        "'unsafe-hashes'", // Necessário para permitir os hashes SHA
-        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='", // toggleSection('visaoGeral')
-        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='", // toggleSection('resumoMensal')
-        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='", // toggleSection('indicadores')
-        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='", // toggleSection('faturamento')
-        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='", // toggleSection('auditoriaFaturas')
-        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='", // toggleSection('contratos')
-        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='", // toggleSection('rankingVendedoras')
-        // Se 'unsafe-inline' ainda for necessário para outros atributos, pode ser adicionado aqui,
-        // mas é melhor usar hashes ou refatorar para event listeners.
-        // Removido 'unsafe-inline' de scriptSrc global para maior segurança,
-        // já que os scripts inline problemáticos (onclick) estão sendo tratados com hashes.
-        // Se houver outros scripts inline (não atributos), eles precisarão de seus próprios hashes ou nonces.
+        "'unsafe-inline'", // Permitir onclick e outros handlers inline
+        "'unsafe-hashes'",
+        "'sha256-kJJ5cdoXelk+WvqnfK7dNBxSXoRrIS0xHZcpppD5wfY='",
+        "'sha256-tSmXuslfl00wg+iQBtNGPbJxq97mb/5eyrJYNwjonnk='",
+        "'sha256-WqKIVMeKiYK/mXSlOY/xKoRuR+LIFnPkThlosCRpFRU='",
+        "'sha256-bYQlCyZn5ecpkVxbDW4A4oJQM13ukaJy7ObH7/zULQw='",
+        "'sha256-2WhdjM4QCzrfo51PZizsT+aS/UaCmQX/w2YUdaRxaRo='",
+        "'sha256-E+GOw5ZXywueFEWEMXaMd9tUXF9haz3udLFhzqA9cDY='",
+        "'sha256-P7dT84UC8RVLokEcCQRvFGZplwsoDbnw9BONa01y5ek='"
       ],
       styleSrc: ["'self'", "'unsafe-inline'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080"],
