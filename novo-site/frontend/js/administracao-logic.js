@@ -19,8 +19,28 @@ function toggleSection(id) {
 window.toggleSection = toggleSection;
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[administracao-logic.js] DOM totalmente carregado. Inicializando Charts.');
+  console.log('[administracao-logic.js] DOM totalmente carregado.');
 
+  // Lógica do Toggle da Sidebar
+  const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
+  const sidebarNav = document.getElementById('sidebar-nav');
+  const mainContent = document.querySelector('main'); // Seleciona o elemento main
+
+  if (sidebarToggleButton && sidebarNav && mainContent) {
+    console.log('[administracao-logic.js] Elementos da sidebar e main encontrados.');
+    sidebarToggleButton.addEventListener('click', () => {
+      console.log('[administracao-logic.js] Botão de toggle da sidebar clicado.');
+      document.body.classList.toggle('sidebar-collapsed'); // Adiciona/remove classe no body
+      // Ou alternar uma classe diretamente na sidebarNav e no mainContent
+      // sidebarNav.classList.toggle('collapsed');
+      // mainContent.classList.toggle('expanded');
+    });
+  } else {
+    console.warn('[administracao-logic.js] Botão de toggle da sidebar, sidebarNav ou main não encontrados.');
+  }
+
+  // Inicialização dos Charts
+  console.log('[administracao-logic.js] Inicializando Charts.');
   try {
     const chartVisaoGeralEl = document.getElementById('chartVisaoGeral');
     if (chartVisaoGeralEl) {
