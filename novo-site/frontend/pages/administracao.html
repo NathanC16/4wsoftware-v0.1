@@ -21,30 +21,59 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    nav {
+    /* Estilos para a barra de navegação lateral (sidebar) */
+    nav#sidebar-nav {
       background-color: #388e3c;
       color: white;
       width: 250px;
       height: 100vh;
       position: fixed;
-      top: 0;
+      top: 0; /* Ajustar se houver um topbar fixo acima */
       left: 0;
-      padding-top: 4rem;
+      padding-top: 4rem; /* Espaço para o header ou topbar */
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 100; /* Para garantir que fique acima de outros elementos */
     }
-    nav ul {
+    nav#sidebar-nav ul {
       list-style-type: none;
       padding: 0;
     }
-    nav ul li {
+    nav#sidebar-nav ul li {
       padding: 1rem;
       border-bottom: 1px solid #2e7d32;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    nav ul li:hover {
+    nav#sidebar-nav ul li:hover {
       background-color: #43a047;
     }
+
+    /* Estilos para a primeira barra de navegação (horizontal/superior) */
+    nav.top-navbar { /* Adicionar esta classe à primeira tag <nav> */
+      background-color: #f8f9fa; /* Cor de fundo diferente */
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      /* Removido position:fixed para não sobrepor a sidebar, ajustar conforme necessidade */
+    }
+    nav.top-navbar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex; /* Para alinhar itens horizontalmente */
+      justify-content: flex-start; /* Ou center, flex-end */
+    }
+    nav.top-navbar ul li {
+      padding: 0.5rem 1rem;
+      border-bottom: none; /* Remover borda inferior */
+    }
+    nav.top-navbar ul li a {
+      color: #2e7d32; /* Cor do link */
+      text-decoration: none;
+    }
+    nav.top-navbar ul li a:hover {
+      color: #1b5e20;
+    }
+
     main {
       margin-left: 250px;
       padding: 2rem;
@@ -102,17 +131,19 @@
 </head>
 <body>
   <header>Painel Administrativo - 4W Energia</header>
-    <nav>
-      <ul class="nav">
-        <li class="nav-item"><a class="nav-link" href="/index.html#hero">Início</a></li>
-        <li class="nav-item"><a class="nav-link" href="/visualizador-individual.html">Perfil</a></li>
-        <li class="nav-item"><a class="nav-link" href="/user.dados.html">Usuários</a></li>
-        <li class="nav-item"><a class="nav-link" href="/cadastro-usina-coop.html">Cadastro Usina</a></li>
-        <li class="nav-item"><a class="nav-link" href="/admistracao.html">Administração</a></li>
-        <li class="nav-item"><a class="nav-link" href="/login4w.html">Sair</a></li>
+    <!-- Primeira barra de navegação - Adicionada classe top-navbar -->
+    <nav class="top-navbar">
+      <ul class="nav"> <!-- Mantida a classe .nav do Bootstrap para algum estilo base, se houver -->
+        <li class="nav-item"><a class="nav-link" href="../index.html#hero">Início</a></li> <!-- Ajustado caminho para sair de /pages -->
+        <li class="nav-item"><a class="nav-link" href="visualizadoridividual.html">Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="userdados.html">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link" href="usinascadastro.html">Cadastro Usina</a></li>
+        <li class="nav-item"><a class="nav-link" href="administracao.html">Administração</a></li>
+        <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li>
       </ul>
     </nav>
-  <nav>
+  <!-- Segunda barra de navegação - Adicionado ID sidebar-nav -->
+  <nav id="sidebar-nav">
     <ul>
       <li onclick="toggleSection('visaoGeral')">Visão Geral</li>
       <li onclick="toggleSection('resumoMensal')">Resumo Mensal</li>
