@@ -212,9 +212,12 @@
     renderNavbar('navbar-container');
     renderFooter('footer-container');
     renderTopbar('topbar-container');
+    console.log('[administracao.html] Módulo de layout e login carregado e funções chamadas.');
   </script>
   <script>
+    console.log('[administracao.html] Script inline para toggleSection e Charts iniciado.');
     function toggleSection(id) {
+      console.log(`[toggleSection] Chamada com id: ${id}`);
       const sections = document.querySelectorAll('main section');
       sections.forEach(sec => sec.classList.remove('active'));
       document.getElementById(id).classList.add('active');
@@ -251,6 +254,7 @@
 
   <!-- Scripts de módulo para auth, navbar, footer, topbar -->
   <script type="module">
+    console.log('[administracao.html] Módulo de layout e login iniciando...');
     // Funções de autenticação (isLoggedIn)
     import { isLoggedIn } from '../assets/js/auth.js';
     // Funções de renderização de layout

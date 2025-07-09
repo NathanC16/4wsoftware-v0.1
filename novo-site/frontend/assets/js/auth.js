@@ -1,7 +1,9 @@
 // novo-site/frontend/assets/js/auth.js
+console.log('[auth.js] Módulo auth.js carregado.');
 
 // Função para realizar o login
 export async function login(usuario, senha) {
+  console.log('[auth.js] login chamado com usuário:', usuario);
   try {
     const response = await fetch('/api/auth/login', { // Endpoint correto do backend
       method: 'POST',
@@ -45,7 +47,9 @@ export function logout() {
 export function isLoggedIn() {
   const token = localStorage.getItem('token');
   // Adicionar futuramente: verificar se o token não expirou
-  return !!token;
+  const loggedIn = !!token;
+  console.log('[auth.js] isLoggedIn verificado:', loggedIn);
+  return loggedIn;
 }
 
 // Função para obter o token armazenado

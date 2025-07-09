@@ -3,13 +3,15 @@
 import { logout, getLoggedInUser } from '../assets/js/auth.js';
 
 export function renderTopbar(containerId) {
+  console.log('[topbar.js] renderTopbar chamada para container:', containerId);
   const container = document.getElementById(containerId);
   if (!container) {
-    console.error(`Container do Topbar '${containerId}' não encontrado.`);
+    console.error(`[topbar.js] Container do Topbar '${containerId}' não encontrado.`);
     return;
   }
 
   const userName = getLoggedInUser() || 'Usuário'; // Pega nome do usuário ou usa 'Usuário' como fallback
+  console.log(`[topbar.js] Nome do usuário para topbar: ${userName}`);
 
   const nav = document.createElement('nav');
   nav.className = 'navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow';
@@ -37,6 +39,7 @@ export function renderTopbar(containerId) {
 
   container.innerHTML = ''; // Limpa o container
   container.appendChild(nav);
+  console.log('[topbar.js] Topbar renderizado e adicionado ao container.');
 
   // Event listener para o toggle do menu de perfil
   const perfilToggle = nav.querySelector('#perfilToggle');
@@ -61,8 +64,11 @@ export function renderTopbar(containerId) {
   if (logoutButton) {
     logoutButton.addEventListener('click', (e) => {
       e.preventDefault();
+      console.log('[topbar.js] Botão de logout do topbar clicado.');
       logout(); // Chama a função de logout importada
     });
+  } else {
+    console.warn('[topbar.js] Botão de logout (#topbar-logout-link) não encontrado no DOM do topbar.');
   }
 
   // TODO: Adicionar event listeners para Perfil e Configurações se necessário
