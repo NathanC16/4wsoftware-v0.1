@@ -130,8 +130,12 @@
   </style>
 </head>
 <body>
-  <header>Painel Administrativo - 4W Energia</header>
-    <!-- Primeira barra de navegação - Adicionada classe top-navbar -->
+  <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #2e7d32; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <button id="header-logout-button" class="btn btn-sm btn-light" style="order: -1; /* Para tentar colocar à esquerda */">Sair</button>
+    <span style="font-size: 1.5rem; font-weight: bold;">Painel Administrativo - 4W Energia</span>
+    <span></span> <!-- Elemento vazio para ajudar no alinhamento do título ao centro com flexbox -->
+  </header>
+    <!-- Primeira barra de navegação (top-navbar) - Item "Sair" removido -->
     <nav class="top-navbar">
       <ul class="nav"> <!-- Mantida a classe .nav do Bootstrap para algum estilo base, se houver -->
         <li class="nav-item"><a class="nav-link" href="../index.html#hero">Início</a></li> <!-- Ajustado caminho para sair de /pages -->
@@ -139,7 +143,7 @@
         <li class="nav-item"><a class="nav-link" href="userdados.html">Usuários</a></li>
         <li class="nav-item"><a class="nav-link" href="usinascadastro.html">Cadastro Usina</a></li>
         <li class="nav-item"><a class="nav-link" href="administracao.html">Administração</a></li>
-        <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li>
+        <!-- <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li> --> <!-- Removido -->
       </ul>
     </nav>
   <!-- Segunda barra de navegação - Adicionado ID sidebar-nav -->
@@ -245,51 +249,24 @@
     renderTopbar('topbar-container');
     console.log('[administracao.html] Módulo de layout e login carregado e funções chamadas.');
   </script>
-  <script>
-    console.log('[administracao.html] Script inline para toggleSection e Charts iniciado.');
-    function toggleSection(id) {
-      console.log(`[toggleSection] Chamada com id: ${id}`);
-      const sections = document.querySelectorAll('main section');
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    new Chart(document.getElementById('chartVisaoGeral'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Contratos', 'Cooperativas', 'Usinas', 'Vendedores'],
-        datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
-      }
-    });
-
-    new Chart(document.getElementById('chartResumoMensal'), {
-      type: 'bar',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
-      }
-    });
-
-    new Chart(document.getElementById('chartIndicadores'), {
-      type: 'line',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
-      }
-    });
-  </script>
+  <!-- Script inline de toggleSection e Charts movido para administracao-logic.js -->
 
   <!-- router.js e div#app removidos, pois administracao.html será autocontida -->
   <!-- <script src="../js/router.js"></script> -->
   <!-- <div id="app"></div> -->
 
-  <!-- Scripts de módulo para auth, navbar, footer, topbar -->
+  <!-- Script da lógica específica da página administracao -->
+  <script src="../js/administracao-logic.js" defer></script>
+
+  <!-- Scripts de módulo para auth, e chamadas de renderização de layout -->
   <script type="module">
-    console.log('[administracao.html] Módulo de layout e login iniciando...');
-    // Funções de autenticação (isLoggedIn)
-    import { isLoggedIn } from '../assets/js/auth.js';
+    console.log('[administracao.html] Módulo de importação e inicialização (login check, layout) iniciando...');
+    // Funções de autenticação (isLoggedIn e logout)
+    import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
     // Funções de renderização de layout
-    import { renderNavbar } from '../js/navbar.js';
+    // As funções de renderNavbar, renderFooter, renderTopbar são importadas no primeiro script module.
+    // Se precisar delas aqui também, descomente as importações.
+    // import { renderNavbar } from '../js/navbar.js';
     import { renderFooter } from '../js/footer.js';
     import { renderTopbar } from '../js/topbar.js';
     // Lógica de roteamento principal da página (se aplicável a administracao.html)
@@ -312,6 +289,15 @@
     // Se routes.js for relevante para esta página específica (administracao.html), chame aqui.
     // Exemplo: se administracao.html for um mini-SPA ou usar o sistema de rotas de routes.js
     // initRoutes(); // Descomente e ajuste se routes.js controlar o conteúdo de administracao.html
+
+    // Adiciona evento de clique para o novo botão de logout no header
+    const headerLogoutButton = document.getElementById('header-logout-button');
+    if (headerLogoutButton) {
+      headerLogoutButton.addEventListener('click', () => {
+        console.log('[administracao.html] Botão Sair do header clicado.');
+        authLogout(); // Chama a função logout importada de auth.js
+      });
+    }
   </script>
 
   <!-- Removidas inclusões antigas e duplicadas de auth.js, routes.js como scripts não-módulo -->

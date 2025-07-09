@@ -44,12 +44,12 @@ app.use(helmet({
         "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info
         "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav
         "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // script navigateTo, logout, getUserPermissions
-        // Hashes para scripts inline em administracao.html - ATUALIZADOS
-        "'sha256-VKHcP0OmQSCkZy9HWmtytB1zUYIHyRZc+JRJP/ts+HI='", // Novo hash para script linha 207 (toggleSection, charts, console.log)
-        "'sha256-BRY9MZMe03aLfmNkiRQq/izDEMtHC0W3ODqysI8ZBDM='", // Novo hash para script linha 217 (era chartResumoMensal, pode ter mudado com logs)
-        "'sha256-8WTfXnVmhNWAbewjJ2Uk/BM62LVI2eAA3DVkwBspO/c='", // Novo hash para script linha 256 (era chartIndicadores, pode ter mudado com logs)
-        // Mantendo o hash anterior da linha 255 de administracao.html, caso o conteúdo exato não tenha mudado tanto
-        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Hash para administracao.html linha 255 (script module login check)
+        // Hashes para scripts inline em administracao.html - Removidos pois a lógica foi para arquivo externo
+        // "'sha256-VKHcP0OmQSCkZy9HWmtytB1zUYIHyRZc+JRJP/ts+HI='",
+        // "'sha256-BRY9MZMe03aLfmNkiRQq/izDEMtHC0W3ODqysI8ZBDM='",
+        // "'sha256-8WTfXnVmhNWAbewjJ2Uk/BM62LVI2eAA3DVkwBspO/c='",
+        // Mantendo o hash para o script module de login check em administracao.html
+        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Hash para administracao.html linha ~256 (script module login check)
         "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // Hash para home.html linha 95 (script de cards)
         "'sha256-9ZJDv7tjnvA85pGJvzn+1k1jDpaGnVpoWvaJrAvFgF8='"    // Hash para home.html linha 79 (script que define navigateTo, logout, getUserPermissions)
       ],
