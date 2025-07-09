@@ -130,8 +130,12 @@
   </style>
 </head>
 <body>
-  <header>Painel Administrativo - 4W Energia</header>
-    <!-- Primeira barra de navegação - Adicionada classe top-navbar -->
+  <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #2e7d32; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <button id="header-logout-button" class="btn btn-sm btn-light" style="order: -1; /* Para tentar colocar à esquerda */">Sair</button>
+    <span style="font-size: 1.5rem; font-weight: bold;">Painel Administrativo - 4W Energia</span>
+    <span></span> <!-- Elemento vazio para ajudar no alinhamento do título ao centro com flexbox -->
+  </header>
+    <!-- Primeira barra de navegação (top-navbar) - Item "Sair" removido -->
     <nav class="top-navbar">
       <ul class="nav"> <!-- Mantida a classe .nav do Bootstrap para algum estilo base, se houver -->
         <li class="nav-item"><a class="nav-link" href="../index.html#hero">Início</a></li> <!-- Ajustado caminho para sair de /pages -->
@@ -139,7 +143,7 @@
         <li class="nav-item"><a class="nav-link" href="userdados.html">Usuários</a></li>
         <li class="nav-item"><a class="nav-link" href="usinascadastro.html">Cadastro Usina</a></li>
         <li class="nav-item"><a class="nav-link" href="administracao.html">Administração</a></li>
-        <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li>
+        <!-- <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li> --> <!-- Removido -->
       </ul>
     </nav>
   <!-- Segunda barra de navegação - Adicionado ID sidebar-nav -->
@@ -286,8 +290,8 @@
   <!-- Scripts de módulo para auth, navbar, footer, topbar -->
   <script type="module">
     console.log('[administracao.html] Módulo de layout e login iniciando...');
-    // Funções de autenticação (isLoggedIn)
-    import { isLoggedIn } from '../assets/js/auth.js';
+    // Funções de autenticação (isLoggedIn e logout)
+    import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
     // Funções de renderização de layout
     import { renderNavbar } from '../js/navbar.js';
     import { renderFooter } from '../js/footer.js';
@@ -312,6 +316,15 @@
     // Se routes.js for relevante para esta página específica (administracao.html), chame aqui.
     // Exemplo: se administracao.html for um mini-SPA ou usar o sistema de rotas de routes.js
     // initRoutes(); // Descomente e ajuste se routes.js controlar o conteúdo de administracao.html
+
+    // Adiciona evento de clique para o novo botão de logout no header
+    const headerLogoutButton = document.getElementById('header-logout-button');
+    if (headerLogoutButton) {
+      headerLogoutButton.addEventListener('click', () => {
+        console.log('[administracao.html] Botão Sair do header clicado.');
+        authLogout(); // Chama a função logout importada de auth.js
+      });
+    }
   </script>
 
   <!-- Removidas inclusões antigas e duplicadas de auth.js, routes.js como scripts não-módulo -->
