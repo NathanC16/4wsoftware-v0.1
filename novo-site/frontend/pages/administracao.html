@@ -127,11 +127,29 @@
     .progress {
       height: 20px;
     }
+
+    /* Estilos para sidebar recolhida */
+    body.sidebar-collapsed nav#sidebar-nav {
+      transform: translateX(-100%);
+      /* Ou width: 0; overflow: hidden; */
+    }
+    body.sidebar-collapsed main {
+      margin-left: 0;
+    }
+    nav#sidebar-nav {
+      transition: transform 0.3s ease;
+    }
+    main {
+      transition: margin-left 0.3s ease;
+    }
   </style>
 </head>
 <body>
   <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #2e7d32; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-    <button id="header-logout-button" class="btn btn-sm btn-light" style="order: -1; /* Para tentar colocar à esquerda */">Sair</button>
+    <div style="display: flex; align-items: center;">
+      <button id="sidebar-toggle-button" class="btn btn-sm btn-light me-2">☰</button>
+      <button id="header-logout-button" class="btn btn-sm btn-light">Sair</button>
+    </div>
     <span style="font-size: 1.5rem; font-weight: bold;">Painel Administrativo - 4W Energia</span>
     <span></span> <!-- Elemento vazio para ajudar no alinhamento do título ao centro com flexbox -->
   </header>
