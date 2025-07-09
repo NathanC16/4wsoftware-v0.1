@@ -249,51 +249,24 @@
     renderTopbar('topbar-container');
     console.log('[administracao.html] Módulo de layout e login carregado e funções chamadas.');
   </script>
-  <script>
-    console.log('[administracao.html] Script inline para toggleSection e Charts iniciado.');
-    function toggleSection(id) {
-      console.log(`[toggleSection] Chamada com id: ${id}`);
-      const sections = document.querySelectorAll('main section');
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
-
-    new Chart(document.getElementById('chartVisaoGeral'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Contratos', 'Cooperativas', 'Usinas', 'Vendedores'],
-        datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
-      }
-    });
-
-    new Chart(document.getElementById('chartResumoMensal'), {
-      type: 'bar',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
-      }
-    });
-
-    new Chart(document.getElementById('chartIndicadores'), {
-      type: 'line',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
-      }
-    });
-  </script>
+  <!-- Script inline de toggleSection e Charts movido para administracao-logic.js -->
 
   <!-- router.js e div#app removidos, pois administracao.html será autocontida -->
   <!-- <script src="../js/router.js"></script> -->
   <!-- <div id="app"></div> -->
 
-  <!-- Scripts de módulo para auth, navbar, footer, topbar -->
+  <!-- Script da lógica específica da página administracao -->
+  <script src="../js/administracao-logic.js" defer></script>
+
+  <!-- Scripts de módulo para auth, e chamadas de renderização de layout -->
   <script type="module">
-    console.log('[administracao.html] Módulo de layout e login iniciando...');
+    console.log('[administracao.html] Módulo de importação e inicialização (login check, layout) iniciando...');
     // Funções de autenticação (isLoggedIn e logout)
     import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
     // Funções de renderização de layout
-    import { renderNavbar } from '../js/navbar.js';
+    // As funções de renderNavbar, renderFooter, renderTopbar são importadas no primeiro script module.
+    // Se precisar delas aqui também, descomente as importações.
+    // import { renderNavbar } from '../js/navbar.js';
     import { renderFooter } from '../js/footer.js';
     import { renderTopbar } from '../js/topbar.js';
     // Lógica de roteamento principal da página (se aplicável a administracao.html)
