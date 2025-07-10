@@ -130,6 +130,19 @@
     .progress {
       height: 20px;
     }
+
+    /* Estilos para sidebar recolhida e transições */
+    body.sidebar-collapsed nav#sidebar-nav {
+      transform: translateX(-100%);
+    }
+    body.sidebar-collapsed main {
+      margin-left: 0;
+    }
+    /* nav#sidebar-nav já tem transition: transform 0.3s ease; */
+    /* main já tem transition: margin-left 0.3s ease; */
+    #sidebar-toggle-button {
+      z-index: 101; /* Para garantir que o botão de toggle fique acima da sidebar se houver sobreposição durante a transição */
+    }
   </style>
 </head>
 <body>
