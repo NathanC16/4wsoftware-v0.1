@@ -21,7 +21,7 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    nav {
+    nav#sidebar-nav { /* Aplicado ID para especificidade */
       background-color: #388e3c;
       color: white;
       width: 250px;
@@ -31,23 +31,55 @@
       left: 0;
       padding-top: 4rem;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 100;
+      transition: transform 0.3s ease;
     }
-    nav ul {
+    nav#sidebar-nav ul {
       list-style-type: none;
       padding: 0;
     }
-    nav ul li {
+    nav#sidebar-nav ul li {
       padding: 1rem;
       border-bottom: 1px solid #2e7d32;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    nav ul li:hover {
+    nav#sidebar-nav ul li:hover {
       background-color: #43a047;
+    }
+    nav.top-navbar {
+      background-color: #f8f9fa;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    nav.top-navbar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: flex-start;
+    }
+    nav.top-navbar ul li {
+      padding: 0.5rem 1rem;
+      border-bottom: none;
+    }
+    nav.top-navbar ul li a {
+      color: #2e7d32;
+      text-decoration: none;
+    }
+    nav.top-navbar ul li a:hover {
+      color: #1b5e20;
     }
     main {
       margin-left: 250px;
       padding: 2rem;
+      transition: margin-left 0.3s ease;
+    }
+    body.sidebar-collapsed nav#sidebar-nav {
+      transform: translateX(-100%);
+    }
+    body.sidebar-collapsed main {
+      margin-left: 0;
     }
     section {
       margin-bottom: 1rem;
@@ -101,18 +133,26 @@
   </style>
 </head>
 <body>
-  <header>Painel Administrativo - 4W Energia</header>
-    <nav>
-      <ul class="nav">
-        <li class="nav-item"><a class="nav-link" href="/index.html#hero">Início</a></li>
-        <li class="nav-item"><a class="nav-link" href="/visualizador-individual.html">Perfil</a></li>
-        <li class="nav-item"><a class="nav-link" href="/user.dados.html">Usuários</a></li>
-        <li class="nav-item"><a class="nav-link" href="/cadastro-usina-coop.html">Cadastro Usina</a></li>
-        <li class="nav-item"><a class="nav-link" href="/admistracao.html">Administração</a></li>
-        <li class="nav-item"><a class="nav-link" href="/login4w.html">Sair</a></li>
-      </ul>
-    </nav>
-  <nav>
+  <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #2e7d32; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <div style="display: flex; align-items: center;">
+      <button id="sidebar-toggle-button" class="btn btn-sm btn-light me-2">☰</button>
+      <button id="header-logout-button" class="btn btn-sm btn-light">Sair</button>
+    </div>
+    <span style="font-size: 1.5rem; font-weight: bold;">Painel Administrativo - 4W Energia</span>
+    <span></span>
+  </header>
+
+  <nav class="top-navbar">
+    <ul class="nav">
+      <li class="nav-item"><a class="nav-link" href="../index.html#hero">Início</a></li>
+      <li class="nav-item"><a class="nav-link" href="visualizadoridividual.html">Perfil</a></li>
+      <li class="nav-item"><a class="nav-link" href="userdados.html">Usuários</a></li>
+      <li class="nav-item"><a class="nav-link" href="usinascadastro.html">Cadastro Usina</a></li>
+      <li class="nav-item"><a class="nav-link" href="administracao.html">Administração</a></li>
+    </ul>
+  </nav>
+
+  <nav id="sidebar-nav">
     <ul>
       <li onclick="toggleSection('visaoGeral')">Visão Geral</li>
       <li onclick="toggleSection('resumoMensal')">Resumo Mensal</li>
@@ -123,6 +163,7 @@
       <li onclick="toggleSection('rankingVendedoras')">Ranking Vendedoras</li>
     </ul>
   </nav>
+
   <main>
     <div id="topbar-container"></div>
     <div id="navbar-container"></div>
@@ -204,82 +245,94 @@
     </section>
     <div id="footer-container"></div>
   </main>
-  <script type="module">
-    import { renderNavbar } from './navbar.js';
-    import { renderFooter } from './footer.js';
-    import { renderTopbar } from './topbar.js';
-    renderNavbar('navbar-container');
-    renderFooter('footer-container');
-    renderTopbar('topbar-container');
-  </script>
+
   <script>
+    // Script inline para toggleSection e Charts.
+    // Os hashes para este script na CSP devem ser verificados/atualizados se o conteúdo mudar.
+    // (Hash anterior era 'sha256-1nFBCSxPi4yzm5aO3ZmG54qHI6yzbC+4lv88H2s0rPY=' para o conteúdo com console.log no início)
+    console.log('[administracao.html] Script inline para toggleSection e Charts iniciado.');
     function toggleSection(id) {
+      console.log(`[toggleSection] Chamada com id: ${id}`);
       const sections = document.querySelectorAll('main section');
       sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      const activeSection = document.getElementById(id);
+      if (activeSection) {
+        activeSection.classList.add('active');
+      } else {
+        console.error(`[administracao.html] Seção com id '${id}' não encontrada para ativar.`);
+      }
     }
 
-    new Chart(document.getElementById('chartVisaoGeral'), {
-      type: 'doughnut',
-      data: {
-        labels: ['Contratos', 'Cooperativas', 'Usinas', 'Vendedores'],
-        datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
+    try {
+      const chartVisaoGeralEl = document.getElementById('chartVisaoGeral');
+      if (chartVisaoGeralEl) {
+        new Chart(chartVisaoGeralEl, {
+          type: 'doughnut',
+          data: {
+            labels: ['Contratos', 'Cooperativas', 'Usinas', 'Vendedores'],
+            datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
+          }
+        });
+        console.log('[administracao.html] Chart Visão Geral inicializado.');
+      } else {
+        console.warn('[administracao.html] Elemento canvas chartVisaoGeral não encontrado.');
       }
-    });
 
-    new Chart(document.getElementById('chartResumoMensal'), {
-      type: 'bar',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
+      const chartResumoMensalEl = document.getElementById('chartResumoMensal');
+      if (chartResumoMensalEl) {
+        new Chart(chartResumoMensalEl, {
+          type: 'bar',
+          data: {
+            labels: ['Mai', 'Jun'],
+            datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
+          }
+        });
+        console.log('[administracao.html] Chart Resumo Mensal inicializado.');
+      } else {
+        console.warn('[administracao.html] Elemento canvas chartResumoMensal não encontrado.');
       }
-    });
 
-    new Chart(document.getElementById('chartIndicadores'), {
-      type: 'line',
-      data: {
-        labels: ['Mai', 'Jun'],
-        datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
+      const chartIndicadoresEl = document.getElementById('chartIndicadores');
+      if (chartIndicadoresEl) {
+        new Chart(chartIndicadoresEl, {
+          type: 'line',
+          data: {
+            labels: ['Mai', 'Jun'],
+            datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
+          }
+        });
+        console.log('[administracao.html] Chart Indicadores inicializado.');
+      } else {
+        console.warn('[administracao.html] Elemento canvas chartIndicadores não encontrado.');
       }
-    });
-    // Console.log de diagnóstico para este script inline (toggleSection e Charts)
+    } catch (e) {
+      console.error('[administracao.html] Erro ao inicializar Charts:', e);
+    }
     console.log('[administracao.html] Script inline para toggleSection e Charts finalizado.');
   </script>
-
-  <!--
-    As seguintes inclusões de script foram removidas ou reestruturadas:
-    - <script src="js/auth.js"></script> (auth.js agora é um módulo em assets/js)
-    - <script src="js/routes.js"></script> (routes.js é um módulo, não usado diretamente aqui por enquanto)
-    - <script src="js/router.js"></script> (router.js global, não usado diretamente aqui)
-    - <div id="app"></div> (não usado por esta página autocontida)
-    - <script src="router.js"></script> (duplicado e caminho incorreto)
-    - Múltiplos <script type="module"> foram consolidados abaixo.
-    - <script src="/auth.js"></script> (caminho absoluto incorreto)
-    - <script src="/routes.js"></script> (caminho absoluto incorreto)
-  -->
 
   <!-- Script de módulo principal para esta página -->
   <script type="module">
     console.log('[administracao.html] Módulo principal (auth, layout) iniciando...');
 
-    // Importações de autenticação e layout
     import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
     import { renderNavbar } from '../js/navbar.js';
     import { renderFooter } from '../js/footer.js';
     import { renderTopbar } from '../js/topbar.js';
 
-    // Verifica se o usuário está logado
     if (!isLoggedIn()) {
       console.log('[administracao.html] Usuário não logado, redirecionando para login.');
       window.location.href = 'login4w.html';
     } else {
       console.log('[administracao.html] Usuário logado. Renderizando componentes de layout.');
-      // Renderiza componentes de layout apenas se logado
-      renderNavbar('navbar-container');
-      renderFooter('footer-container');
-      renderTopbar('topbar-container');
+      try {
+        renderNavbar('navbar-container');
+        renderFooter('footer-container');
+        renderTopbar('topbar-container');
+      } catch (e) {
+        console.error('[administracao.html] Erro ao renderizar componentes de layout:', e);
+      }
 
-      // Adiciona evento de clique para o botão de logout no header
       const headerLogoutButton = document.getElementById('header-logout-button');
       if (headerLogoutButton) {
         headerLogoutButton.addEventListener('click', () => {
