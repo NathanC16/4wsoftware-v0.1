@@ -242,30 +242,56 @@
         datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
       }
     });
+    // Console.log de diagnóstico para este script inline (toggleSection e Charts)
+    console.log('[administracao.html] Script inline para toggleSection e Charts finalizado.');
   </script>
-  <script src="js/auth.js"></script>
-<script src="js/routes.js"></script>
-<script src="js/router.js"></script>
- <div id="app"></div>
 
-  <script src="router.js"></script>
+  <!--
+    As seguintes inclusões de script foram removidas ou reestruturadas:
+    - <script src="js/auth.js"></script> (auth.js agora é um módulo em assets/js)
+    - <script src="js/routes.js"></script> (routes.js é um módulo, não usado diretamente aqui por enquanto)
+    - <script src="js/router.js"></script> (router.js global, não usado diretamente aqui)
+    - <div id="app"></div> (não usado por esta página autocontida)
+    - <script src="router.js"></script> (duplicado e caminho incorreto)
+    - Múltiplos <script type="module"> foram consolidados abaixo.
+    - <script src="/auth.js"></script> (caminho absoluto incorreto)
+    - <script src="/routes.js"></script> (caminho absoluto incorreto)
+  -->
+
+  <!-- Script de módulo principal para esta página -->
   <script type="module">
-  import { isLoggedIn } from './auth.js';
+    console.log('[administracao.html] Módulo principal (auth, layout) iniciando...');
 
-  if (!isLoggedIn()) {
-    window.location.href = 'login4w.html';
-  }
-</script>
- <script type="module">
-  import { isLoggedIn } from './scripts/auth.js';
-  import { renderNavbar } from './scripts/navbar.js';
+    // Importações de autenticação e layout
+    import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
+    import { renderNavbar } from '../js/navbar.js';
+    import { renderFooter } from '../js/footer.js';
+    import { renderTopbar } from '../js/topbar.js';
 
-  if (!isLoggedIn()) {
-    window.location.href = 'login4w.html';
-  }
-</script>
-<script src="/auth.js"></script>
-<script src="/routes.js"></script>
+    // Verifica se o usuário está logado
+    if (!isLoggedIn()) {
+      console.log('[administracao.html] Usuário não logado, redirecionando para login.');
+      window.location.href = 'login4w.html';
+    } else {
+      console.log('[administracao.html] Usuário logado. Renderizando componentes de layout.');
+      // Renderiza componentes de layout apenas se logado
+      renderNavbar('navbar-container');
+      renderFooter('footer-container');
+      renderTopbar('topbar-container');
+
+      // Adiciona evento de clique para o botão de logout no header
+      const headerLogoutButton = document.getElementById('header-logout-button');
+      if (headerLogoutButton) {
+        headerLogoutButton.addEventListener('click', () => {
+          console.log('[administracao.html] Botão Sair do header clicado.');
+          authLogout();
+        });
+      } else {
+        console.warn('[administracao.html] Botão Sair do header (header-logout-button) não encontrado.');
+      }
+    }
+    console.log('[administracao.html] Módulo principal finalizado.');
+  </script>
 
 </body>
 </html>
