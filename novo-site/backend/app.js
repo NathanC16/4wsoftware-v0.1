@@ -45,9 +45,11 @@ app.use(helmet({
         "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav em home.html
         // "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // Removido - Duplicata/Antigo para script da linha 79 home.html
 
-        // Hashes para scripts inline em administracao.html
-        "'sha256-VKHcP0OmQSCkZy9HWmtytB1zUYIHyRZc+JRJP/ts+HI='", // Para o bloco de script que define toggleSection e os Charts
-        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Para o script de módulo no final de administracao.html (login check, layout)
+        // Hashes para scripts inline em administracao.html - ATUALIZADOS CONFORME ÚLTIMO FEEDBACK
+        "'sha256-1nFBCSxPi4yzm5aO3ZmG54qHI6yzbC+4lv88H2s0rPY='", // linha 207 (toggleSection, Charts)
+        "'sha256-FEyIzOdPXqr98LQlVejYXew9U5OiwfXlTd809VLqp3M='", // linha 215 (módulo layout/auth)
+        "'sha256-zIxNOUOaMqw5CR90+xQrSXo/lT6YcH0QReDjcmyl1MY='", // linha 262 (outro script de módulo)
+                                                                // Hashes antigos 'sha256-VKH...' e 'sha256-yATv...' para administracao.html foram substituídos pelos acima.
 
         // Hashes para scripts inline em home.html (continuando)
         "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // script de cards em home.html (linha 95)
