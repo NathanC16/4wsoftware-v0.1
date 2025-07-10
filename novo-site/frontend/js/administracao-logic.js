@@ -23,20 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lógica do Toggle da Sidebar
   const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
+  console.log('[administracao-logic.js] sidebarToggleButton:', sidebarToggleButton); // Log do elemento
+
   const sidebarNav = document.getElementById('sidebar-nav');
+  console.log('[administracao-logic.js] sidebarNav:', sidebarNav); // Log do elemento
+
   const mainContent = document.querySelector('main'); // Seleciona o elemento main
+  console.log('[administracao-logic.js] mainContent:', mainContent); // Log do elemento
 
   if (sidebarToggleButton && sidebarNav && mainContent) {
-    console.log('[administracao-logic.js] Elementos da sidebar e main encontrados.');
+    console.log('[administracao-logic.js] TODOS os elementos da sidebar e main foram encontrados. Adicionando event listener.');
     sidebarToggleButton.addEventListener('click', () => {
-      console.log('[administracao-logic.js] Botão de toggle da sidebar clicado.');
-      document.body.classList.toggle('sidebar-collapsed'); // Adiciona/remove classe no body
-      // Ou alternar uma classe diretamente na sidebarNav e no mainContent
-      // sidebarNav.classList.toggle('collapsed');
-      // mainContent.classList.toggle('expanded');
+      console.log('[administracao-logic.js] Botão de toggle da sidebar FOI CLICADO.');
+      document.body.classList.toggle('sidebar-collapsed');
     });
   } else {
-    console.warn('[administracao-logic.js] Botão de toggle da sidebar, sidebarNav ou main não encontrados.');
+    console.warn('[administracao-logic.js] FALHA: Um ou mais elementos para o toggle da sidebar não foram encontrados.');
+    if (!sidebarToggleButton) console.warn('[administracao-logic.js] sidebar-toggle-button NÃO encontrado.');
+    if (!sidebarNav) console.warn('[administracao-logic.js] sidebar-nav NÃO encontrado.');
+    if (!mainContent) console.warn('[administracao-logic.js] main NÃO encontrado.');
   }
 
   // Inicialização dos Charts
