@@ -1,6 +1,7 @@
 // novo-site/frontend/js/administracao-logic.js
-console.log('[administracao-logic.js] Script carregado e parseado.');
+console.log('[administracao-logic.js] SCRIPT CARREGADO E EXECUTADO - TESTE DE CARREGAMENTO.');
 
+/*
 // Função para alternar seções (Visão Geral, etc.)
 function toggleSection(id) {
   console.log(`[administracao-logic.js] toggleSection chamada com id: ${id}`);
@@ -106,3 +107,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   console.log('[administracao-logic.js] Fim do listener DOMContentLoaded.');
 });
+*/
