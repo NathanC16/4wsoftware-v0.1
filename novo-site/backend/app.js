@@ -39,19 +39,19 @@ app.use(helmet({
         "https://code.jquery.com",
         "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='", // Hash para script inline em index.html
         // Hashes para scripts inline em home.html
-        "'sha256-Ikq0WQqbkcIVDAlUqYb/LPNieogAAf9WCReiPkZrt00='", // script cards
-        "'sha256-2hxGndJiWVIMkmvBSka4n+eGJeaDd0EZvxtzJvgRcjA='", // script data-permission
-        "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info
-        "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav
-        "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // script navigateTo, logout, getUserPermissions
-        // Hashes para scripts inline em administracao.html - Removidos pois a lógica foi para arquivo externo
-        // "'sha256-VKHcP0OmQSCkZy9HWmtytB1zUYIHyRZc+JRJP/ts+HI='",
-        // "'sha256-BRY9MZMe03aLfmNkiRQq/izDEMtHC0W3ODqysI8ZBDM='",
-        // "'sha256-8WTfXnVmhNWAbewjJ2Uk/BM62LVI2eAA3DVkwBspO/c='",
-        // Mantendo o hash para o script module de login check em administracao.html
-        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Hash para administracao.html linha ~256 (script module login check)
-        "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // Hash para home.html linha 95 (script de cards)
-        "'sha256-9ZJDv7tjnvA85pGJvzn+1k1jDpaGnVpoWvaJrAvFgF8='"    // Hash para home.html linha 79 (script que define navigateTo, logout, getUserPermissions)
+        "'sha256-Ikq0WQqbkcIVDAlUqYb/LPNieogAAf9WCReiPkZrt00='", // script cards em home.html
+        "'sha256-2hxGndJiWVIMkmvBSka4n+eGJeaDd0EZvxtzJvgRcjA='", // script data-permission em home.html
+        "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info em home.html
+        "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav em home.html
+        // "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // Removido - Duplicata/Antigo para script da linha 79 home.html
+
+        // Hashes para scripts inline em administracao.html
+        "'sha256-VKHcP0OmQSCkZy9HWmtytB1zUYIHyRZc+JRJP/ts+HI='", // Para o bloco de script que define toggleSection e os Charts
+        "'sha256-yATv85Dt/CVKJGQnOxL+zSw6VYRzG4loQ+oTbooUus4='",  // Para o script de módulo no final de administracao.html (login check, layout)
+
+        // Hashes para scripts inline em home.html (continuando)
+        "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // script de cards em home.html (linha 95)
+        "'sha256-9ZJDv7tjnvA85pGJvzn+1k1jDpaGnVpoWvaJrAvFgF8='"    // script que define navigateTo, logout, getUserPermissions em home.html (linha 79)
       ],
       scriptSrcAttr: [
         "'self'",
