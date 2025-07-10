@@ -21,59 +21,30 @@
       font-size: 1.5rem;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    /* Estilos para a barra de navegação lateral (sidebar) */
-    nav#sidebar-nav {
+    nav {
       background-color: #388e3c;
       color: white;
       width: 250px;
       height: 100vh;
       position: fixed;
-      top: 0; /* Ajustar se houver um topbar fixo acima */
+      top: 0;
       left: 0;
-      padding-top: 4rem; /* Espaço para o header ou topbar */
+      padding-top: 4rem;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      z-index: 100; /* Para garantir que fique acima de outros elementos */
     }
-    nav#sidebar-nav ul {
+    nav ul {
       list-style-type: none;
       padding: 0;
     }
-    nav#sidebar-nav ul li {
+    nav ul li {
       padding: 1rem;
       border-bottom: 1px solid #2e7d32;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    nav#sidebar-nav ul li:hover {
+    nav ul li:hover {
       background-color: #43a047;
     }
-
-    /* Estilos para a primeira barra de navegação (horizontal/superior) */
-    nav.top-navbar { /* Adicionar esta classe à primeira tag <nav> */
-      background-color: #f8f9fa; /* Cor de fundo diferente */
-      padding: 0.5rem 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      /* Removido position:fixed para não sobrepor a sidebar, ajustar conforme necessidade */
-    }
-    nav.top-navbar ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      display: flex; /* Para alinhar itens horizontalmente */
-      justify-content: flex-start; /* Ou center, flex-end */
-    }
-    nav.top-navbar ul li {
-      padding: 0.5rem 1rem;
-      border-bottom: none; /* Remover borda inferior */
-    }
-    nav.top-navbar ul li a {
-      color: #2e7d32; /* Cor do link */
-      text-decoration: none;
-    }
-    nav.top-navbar ul li a:hover {
-      color: #1b5e20;
-    }
-
     main {
       margin-left: 250px;
       padding: 2rem;
@@ -127,45 +98,21 @@
     .progress {
       height: 20px;
     }
-
-    /* Estilos para sidebar recolhida */
-    body.sidebar-collapsed nav#sidebar-nav {
-      transform: translateX(-100%);
-      /* Ou width: 0; overflow: hidden; */
-    }
-    body.sidebar-collapsed main {
-      margin-left: 0;
-    }
-    nav#sidebar-nav {
-      transition: transform 0.3s ease;
-    }
-    main {
-      transition: margin-left 0.3s ease;
-    }
   </style>
 </head>
 <body>
-  <header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #2e7d32; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-    <div style="display: flex; align-items: center;">
-      <button id="sidebar-toggle-button" class="btn btn-sm btn-light me-2">☰</button>
-      <button id="header-logout-button" class="btn btn-sm btn-light">Sair</button>
-    </div>
-    <span style="font-size: 1.5rem; font-weight: bold;">Painel Administrativo - 4W Energia</span>
-    <span></span> <!-- Elemento vazio para ajudar no alinhamento do título ao centro com flexbox -->
-  </header>
-    <!-- Primeira barra de navegação (top-navbar) - Item "Sair" removido -->
-    <nav class="top-navbar">
-      <ul class="nav"> <!-- Mantida a classe .nav do Bootstrap para algum estilo base, se houver -->
-        <li class="nav-item"><a class="nav-link" href="../index.html#hero">Início</a></li> <!-- Ajustado caminho para sair de /pages -->
-        <li class="nav-item"><a class="nav-link" href="visualizadoridividual.html">Perfil</a></li>
-        <li class="nav-item"><a class="nav-link" href="userdados.html">Usuários</a></li>
-        <li class="nav-item"><a class="nav-link" href="usinascadastro.html">Cadastro Usina</a></li>
-        <li class="nav-item"><a class="nav-link" href="administracao.html">Administração</a></li>
-        <!-- <li class="nav-item"><a class="nav-link" href="login4w.html">Sair</a></li> --> <!-- Removido -->
+  <header>Painel Administrativo - 4W Energia</header>
+    <nav>
+      <ul class="nav">
+        <li class="nav-item"><a class="nav-link" href="/index.html#hero">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="/visualizador-individual.html">Perfil</a></li>
+        <li class="nav-item"><a class="nav-link" href="/user.dados.html">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link" href="/cadastro-usina-coop.html">Cadastro Usina</a></li>
+        <li class="nav-item"><a class="nav-link" href="/admistracao.html">Administração</a></li>
+        <li class="nav-item"><a class="nav-link" href="/login4w.html">Sair</a></li>
       </ul>
     </nav>
-  <!-- Segunda barra de navegação - Adicionado ID sidebar-nav -->
-  <nav id="sidebar-nav">
+  <nav>
     <ul>
       <li onclick="toggleSection('visaoGeral')">Visão Geral</li>
       <li onclick="toggleSection('resumoMensal')">Resumo Mensal</li>
@@ -258,71 +205,67 @@
     <div id="footer-container"></div>
   </main>
   <script type="module">
-    // Corrigido o caminho para os módulos JS
-    import { renderNavbar } from '../js/navbar.js';
-    import { renderFooter } from '../js/footer.js';
-    import { renderTopbar } from '../js/topbar.js';
+    import { renderNavbar } from './navbar.js';
+    import { renderFooter } from './footer.js';
+    import { renderTopbar } from './topbar.js';
     renderNavbar('navbar-container');
     renderFooter('footer-container');
     renderTopbar('topbar-container');
-    console.log('[administracao.html] Módulo de layout e login carregado e funções chamadas.');
   </script>
-  <!-- Script inline de toggleSection e Charts movido para administracao-logic.js -->
+  <script>
+    function toggleSection(id) {
+      const sections = document.querySelectorAll('main section');
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-  <!-- router.js e div#app removidos, pois administracao.html será autocontida -->
-  <!-- <script src="../js/router.js"></script> -->
-  <!-- <div id="app"></div> -->
+    new Chart(document.getElementById('chartVisaoGeral'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Contratos', 'Cooperativas', 'Usinas', 'Vendedores'],
+        datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
+      }
+    });
 
-  <!-- Script da lógica específica da página administracao -->
-  <script src="../js/administracao-logic.js" defer></script>
+    new Chart(document.getElementById('chartResumoMensal'), {
+      type: 'bar',
+      data: {
+        labels: ['Mai', 'Jun'],
+        datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
+      }
+    });
 
-  <!-- Scripts de módulo para auth, e chamadas de renderização de layout -->
+    new Chart(document.getElementById('chartIndicadores'), {
+      type: 'line',
+      data: {
+        labels: ['Mai', 'Jun'],
+        datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
+      }
+    });
+  </script>
+  <script src="js/auth.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/router.js"></script>
+ <div id="app"></div>
+
+  <script src="router.js"></script>
   <script type="module">
-    console.log('[administracao.html] Módulo de importação e inicialização (login check, layout) iniciando...');
-    // Funções de autenticação (isLoggedIn e logout)
-    import { isLoggedIn, logout as authLogout } from '../assets/js/auth.js';
-    // Funções de renderização de layout
-    // As funções de renderNavbar, renderFooter, renderTopbar são importadas no primeiro script module.
-    // Se precisar delas aqui também, descomente as importações.
-    // import { renderNavbar } from '../js/navbar.js';
-    import { renderFooter } from '../js/footer.js';
-    import { renderTopbar } from '../js/topbar.js';
-    // Lógica de roteamento principal da página (se aplicável a administracao.html)
-    // ou apenas para verificação de login e renderização de layout.
-    // Se routes.js for para um SPA e administracao.html for uma página completa,
-    // talvez initRoutes() não seja necessário aqui, ou precise ser adaptado.
-    // Por enquanto, vamos focar em fazer o isLoggedIn e o layout funcionarem.
-    // import { initRoutes } from '../js/routes.js';
+  import { isLoggedIn } from './auth.js';
 
-    if (!isLoggedIn()) {
-      window.location.href = 'login4w.html';
-    }
+  if (!isLoggedIn()) {
+    window.location.href = 'login4w.html';
+  }
+</script>
+ <script type="module">
+  import { isLoggedIn } from './scripts/auth.js';
+  import { renderNavbar } from './scripts/navbar.js';
 
-    // Renderiza componentes de layout
-    // Estas funções já estavam no primeiro script type="module" e foram movidas para cá.
-    renderNavbar('navbar-container');
-    renderFooter('footer-container');
-    renderTopbar('topbar-container');
-
-    // Se routes.js for relevante para esta página específica (administracao.html), chame aqui.
-    // Exemplo: se administracao.html for um mini-SPA ou usar o sistema de rotas de routes.js
-    // initRoutes(); // Descomente e ajuste se routes.js controlar o conteúdo de administracao.html
-
-    // Adiciona evento de clique para o novo botão de logout no header
-    const headerLogoutButton = document.getElementById('header-logout-button');
-    if (headerLogoutButton) {
-      headerLogoutButton.addEventListener('click', () => {
-        console.log('[administracao.html] Botão Sair do header clicado.');
-        authLogout(); // Chama a função logout importada de auth.js
-      });
-    }
-  </script>
-
-  <!-- Removidas inclusões antigas e duplicadas de auth.js, routes.js como scripts não-módulo -->
-  <!-- A funcionalidade de renderNavbar já está no primeiro bloco de script type="module" -->
-  <!-- A funcionalidade de isLoggedIn já está no bloco de script type="module" acima -->
-
-  <!-- Removidas chamadas de script com caminhos absolutos /auth.js e /routes.js pois já foram carregados acima com caminhos corretos -->
+  if (!isLoggedIn()) {
+    window.location.href = 'login4w.html';
+  }
+</script>
+<script src="/auth.js"></script>
+<script src="/routes.js"></script>
 
 </body>
 </html>
