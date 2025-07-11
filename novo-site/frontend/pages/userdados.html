@@ -217,9 +217,9 @@
           $('#editButton').hide();
         }
 
-        // Torna a tabela visível após o carregamento dos dados
-        $('#leadsTable').show();
-        $('#toggleTable').text('Ocultar Tabela');
+        // A tabela começa oculta por padrão (style="display:none;")
+        // O texto do botão '#toggleTable' já é 'Mostrar Tabela' no HTML.
+        // A lógica de mostrar/ocultar será tratada pelo event listener do botão.
 
       } catch (err) {
         console.error('Erro ao carregar usuários:', err);
@@ -244,6 +244,16 @@
 
       console.log('Buscando dados dos usuários...');
       await carregarUsuarios(); // Chama a função para carregar os usuários
+
+      // Adiciona o event listener para o botão #toggleTable
+      $('#toggleTable').on('click', function() {
+        $('#leadsTable').toggle(); // Alterna a visibilidade da tabela
+        if ($('#leadsTable').is(':visible')) {
+          $(this).text('Ocultar Tabela');
+        } else {
+          $(this).text('Mostrar Tabela');
+        }
+      });
 
       console.log('jQuery ready function executed.');
       console.log('Toggle Table button:', $('#toggleTable').length ? 'Found' : 'Not Found');
