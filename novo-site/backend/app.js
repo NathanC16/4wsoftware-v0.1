@@ -30,15 +30,15 @@ app.use(helmet({
       defaultSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080"],
       scriptSrc: [
         "'self'",
-        "'unsafe-eval'", // Necessário para Chart.js se não for refatorado
+        "'unsafe-eval'", // Necessário para Chart.js se não for refatorado para evitar eval.
         "https://localhost:8080",
         "https://127.0.0.1:8080",
-        "https://cdn.jsdelivr.net",
-        "https://cdn.datatables.net",
-        "https://cdnjs.cloudflare.com",
-        "https://code.jquery.com",
-        "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='", // Hash para script inline em index.html
-        // Hashes para scripts inline em home.html
+        "https://cdn.jsdelivr.net", // Para Bootstrap e Chart.js
+        "https://cdn.datatables.net", // Se estiver usando DataTables de CDN
+        "https://cdnjs.cloudflare.com", // Outro CDN comum
+        "https://code.jquery.com", // Se estiver usando jQuery de CDN
+        "'sha256-/JQ63pWYde98RInTtdPS/CuLs8FJ3+tJHEA3/FKUc+U='", // Hash para script inline em index.html (se houver)
+        // Hashes para scripts inline em home.html (mantidos)
         "'sha256-Ikq0WQqbkcIVDAlUqYb/LPNieogAAf9WCReiPkZrt00='", // script cards em home.html
         "'sha256-2hxGndJiWVIMkmvBSka4n+eGJeaDd0EZvxtzJvgRcjA='", // script data-permission em home.html
         "'sha256-tFKfbN3ifeBSIviqxe2+HHbBhUOWRlOLPHL44QZdzHI='", // script DOMContentLoaded user-info em home.html
@@ -46,11 +46,11 @@ app.use(helmet({
         // "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // Removido - Duplicata/Antigo para script da linha 79 home.html
 
         // Hashes para scripts inline em administracao.html
-        // Removidos:
-        // "'sha256-o3KPeo6Bns/OS7ra33XMtcYSrNDlvhLyY+0nO3PLbNg='", // Era para toggleSection e Charts, agora em arquivo externo
-        // "'sha256-NhvjykiwnB7p10oxDeG68iOdeuluB+fBMutJgZKzOLI='", // Era para módulo principal em administracao.html, que não precisa mais de hash específico se o conteúdo não mudou ou se é coberto por 'self' para scripts externos.
-        // Adicionado novo hash para o script inline do toggle da sidebar em administracao.html:
-        "'sha256-FIIxVPEdESv9M2M92PzG649S1Jt6n2y7d8Hk+9EUDjY='", // Script do DOMContentLoaded para sidebar-toggle-button
+        // O hash antigo/incorreto para o toggle da sidebar foi removido.
+        // "'sha256-FIIxVPEdESv9M2M92PzG649S1Jt6n2y7d8Hk+9EUDjY='",
+        // Adicionados os hashes corretos para os scripts inline em administracao.html, conforme sugerido pelos logs:
+        "'sha256-mIQoxVBWO+0+oQcXAzj3HWb/l3/BbLRYs3mcpmLqlj8='", // Para o script de módulo em administracao.html
+        "'sha256-p3oZ2jVCGOGFztlnSMO9wDOEOAtU6Dt3bmpYUw6SIgk='", // Para o script DOMContentLoaded do sidebar-toggle em administracao.html
 
         // Hashes para scripts inline em home.html (mantidos)
         "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // script de cards em home.html (linha 95)
@@ -58,42 +58,42 @@ app.use(helmet({
       ],
       scriptSrcAttr: [
         "'self'",
-        "'unsafe-inline'" // Permitir todos os manipuladores de evento inline (onclick, etc.)
-                         // Removidos hashes específicos daqui para evitar conflito que ignora 'unsafe-inline'
+        "'unsafe-inline'" // Permite todos os manipuladores de evento inline (ex: onclick).
+                         // Hashes específicos para atributos foram removidos para evitar conflitos com 'unsafe-inline'.
       ],
       styleSrc: ["'self'", "'unsafe-inline'", "https://localhost:8080", "https://127.0.0.1:8080", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "https://fonts.gstatic.com", "https://cdn.datatables.net", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080", "https://source.unsplash.com"],
-      connectSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080", "https://servicodados.ibge.gov.br"],
-      fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https://localhost:8080", "https://127.0.0.1:8080", "https://source.unsplash.com"], // permite imagens da mesma origem, data URIs e de unsplash
+      connectSrc: ["'self'", "https://localhost:8080", "https://127.0.0.1:8080", "https://servicodados.ibge.gov.br"], // permite conexões para si mesmo e IBGE
+      fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:", "https://fonts.gstatic.com"], // permite fontes da mesma origem, cdnjs e fonts.gstatic.com
     },
   },
 }));
 
-// Limite de taxa para prevenir ataques de força bruta
+// Limite de taxa para prevenir ataques de força bruta (Rate Limiting)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Limite de 100 requisições por IP a cada 15 minutos
-  standardHeaders: true, // Retorna informações de limite de taxa nos cabeçalhos Standard
-  legacyHeaders: false, // Desabilita os cabeçalhos X-RateLimit-*
-  message: 'Muitas requisições vindas deste IP, tente novamente após 15 minutos.', // Mensagem de erro
+  windowMs: 15 * 60 * 1000, // Janela de 15 minutos
+  max: 100, // Limita cada IP a 100 requisições por janela de 15 minutos
+  standardHeaders: true, // Envia informações de limite de taxa nos cabeçalhos padrão `RateLimit-*`
+  legacyHeaders: false, // Desabilita os cabeçalhos antigos `X-RateLimit-*`
+  message: 'Muitas requisições originadas deste IP, por favor, tente novamente após 15 minutos.', // Mensagem de erro customizada
 });
 app.use(limiter);
 
-// CORS controlado para permitir requisições de origens específicas
+// Configuração do CORS (Cross-Origin Resource Sharing)
 app.use(cors({
-  origin: ['https://localhost:8080', 'https://127.0.0.1:8080'], // Origens permitidas (agora apenas o próprio servidor)
+  origin: ['https://localhost:8080', 'https://127.0.0.1:8080'], // Permite requisições apenas do próprio servidor/domínio
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos HTTP permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos nas requisições
 }));
 
-// Logger HTTP para registrar requisições no console
+// Logger HTTP (Morgan) para registrar requisições no console em formato 'dev'
 app.use(morgan('dev'));
 
-// Parsers para requisições JSON e URL encoded
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middlewares para parsear (analisar) o corpo das requisições
+app.use(express.json()); // Para parsear requisições com corpo em JSON
+app.use(express.urlencoded({ extended: true })); // Para parsear requisições com corpo em URL-encoded
 
-// Servir arquivos estáticos do frontend
+// Middleware para servir arquivos estáticos da pasta 'frontend'
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Importação das rotas da API
@@ -104,9 +104,9 @@ import usuariosRoutes from './routes/usuarios.js';
 import cooperativaRoutes from './routes/cooperativaRoutes.js';
 import turbinaRoutes from './routes/turbinaRoutes.js';
 import usinaRoutes from './routes/usinaRoutes.js';
-// import rotaSimples from './routes/testeSimples.js'; // Removido pois o arquivo foi deletado
+// import rotaSimples from './routes/testeSimples.js'; // Rota de teste simples, removida pois o arquivo foi deletado
 
-// Importação de utilitários e modelos
+// Importação de utilitários e modelos do banco de dados
 import { criarUsuariosPadrao } from './utils/criarUsuariosPadrao.js';
 import User from './models/User.js';
 import bcrypt from 'bcryptjs';
