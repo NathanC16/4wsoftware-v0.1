@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
           datasets: [{ data: [258, 3, 21, 6], backgroundColor: ['#66bb6a','#81c784','#a5d6a7','#c8e6c9'] }]
         }
       });
-      console.log('[administracao-logic.js] Chart Visão Geral inicializado.');
+      console.log('[administracao-logic.js] Gráfico Visão Geral inicializado.');
     } else {
       console.warn('[administracao-logic.js] Elemento canvas chartVisaoGeral não encontrado.');
     }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
           datasets: [{ label: 'Receita Mensal (R$)', data: [51000, 72300], backgroundColor: '#388e3c' }]
         }
       });
-      console.log('[administracao-logic.js] Chart Resumo Mensal inicializado.');
+      console.log('[administracao-logic.js] Gráfico Resumo Mensal inicializado.');
     } else {
       console.warn('[administracao-logic.js] Elemento canvas chartResumoMensal não encontrado.');
     }
@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
           datasets: [{ label: 'Indicadores', data: [45, 62], borderColor: '#43a047', fill: false }]
         }
       });
-      console.log('[administracao-logic.js] Chart Indicadores inicializado.');
+      console.log('[administracao-logic.js] Gráfico Indicadores inicializado.');
     } else {
       console.warn('[administracao-logic.js] Elemento canvas chartIndicadores não encontrado.');
     }
   } catch (e) {
-    console.error('[administracao-logic.js] Erro ao inicializar Charts:', e);
+    console.error('[administracao-logic.js] Erro ao inicializar gráficos:', e);
   }
   console.log('[administracao-logic.js] Inicialização de gráficos finalizada.');
 });
