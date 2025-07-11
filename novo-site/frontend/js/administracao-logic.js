@@ -1,64 +1,33 @@
 // novo-site/frontend/js/administracao-logic.js
-console.log('[administracao-logic.js] Script carregado e parseado.');
+// Lógica para a página de administração, incluindo toggle de seções e inicialização de gráficos.
 
-// Função para alternar seções (Visão Geral, etc.)
+console.log('[administracao-logic.js] Script carregado.');
+
 function toggleSection(id) {
-  console.log(`[administracao-logic.js] toggleSection chamada com id: ${id}`);
+  console.log(`[administracao-logic.js - toggleSection] Chamada com id: ${id}`);
   const sections = document.querySelectorAll('main section');
   sections.forEach(sec => {
     sec.classList.remove('active');
   });
+
   const activeSection = document.getElementById(id);
   if (activeSection) {
     activeSection.classList.add('active');
+    console.log(`[administracao-logic.js - toggleSection] Seção '${id}' ativada.`);
   } else {
-    console.error(`[administracao-logic.js] Seção com id '${id}' não encontrada para ativar.`);
+    console.error(`[administracao-logic.js - toggleSection] Seção com id '${id}' não encontrada para ativar.`);
   }
 }
-// Torna toggleSection global para os onclicks no HTML, se eles ainda existirem e não forem substituídos por event listeners.
+
+// Para garantir que toggleSection esteja disponível globalmente se chamada por atributos onclick no HTML
+// Os scripts dos gráficos agora estão dentro do DOMContentLoaded, então toggleSection pode ser chamada
+// diretamente pelos `onclick` do HTML, desde que este script seja carregado antes dos scripts modulares
+// ou de forma que `window.toggleSection` seja definido a tempo.
+// Colocar no escopo global explicitamente é mais seguro para `onclick`.
 window.toggleSection = toggleSection;
 
-// Lógica principal da página de administração após o DOM carregar
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('[administracao-logic.js] Evento DOMContentLoaded disparado.');
-
-  // Configuração do Toggle da Sidebar
-  console.log('[administracao-logic.js] Tentando encontrar o botão de toggle da sidebar...');
-  const sidebarToggleButton = document.getElementById('sidebar-toggle-button');
-
-  if (sidebarToggleButton) {
-    console.log('[administracao-logic.js] Botão #sidebar-toggle-button ENCONTRADO:', sidebarToggleButton);
-
-    console.log('[administracao-logic.js] Tentando encontrar #sidebar-nav...');
-    const sidebarNavEl = document.getElementById('sidebar-nav');
-
-    if (sidebarNavEl) {
-      console.log('[administracao-logic.js] Elemento #sidebar-nav ENCONTRADO:', sidebarNavEl);
-
-      console.log('[administracao-logic.js] Tentando encontrar o elemento <main>...');
-      const mainContentEl = document.querySelector('main');
-
-      if (mainContentEl) {
-        console.log('[administracao-logic.js] Elemento <main> ENCONTRADO:', mainContentEl);
-        console.log('[administracao-logic.js] Configurando event listener para o botão de toggle da sidebar...');
-        sidebarToggleButton.addEventListener('click', () => {
-          console.log('[administracao-logic.js] Botão de toggle da sidebar FOI CLICADO.');
-          document.body.classList.toggle('sidebar-collapsed');
-          console.log(`[administracao-logic.js] Classe 'sidebar-collapsed' no body agora é: ${document.body.classList.contains('sidebar-collapsed')}`);
-        });
-        console.log('[administracao-logic.js] Event listener para o toggle da sidebar CONFIGURADO.');
-      } else {
-        console.error('[administracao-logic.js] FALHA CRÍTICA: Elemento <main> não encontrado. Toggle da sidebar não funcionará corretamente.');
-      }
-    } else {
-      console.error('[administracao-logic.js] FALHA CRÍTICA: Elemento #sidebar-nav não encontrado. Toggle da sidebar não funcionará.');
-    }
-  } else {
-    console.error('[administracao-logic.js] FALHA CRÍTICA: Botão #sidebar-toggle-button não encontrado. Toggle da sidebar não funcionará.');
-  }
-
-  // Inicialização dos Charts
-  console.log('[administracao-logic.js] Tentando inicializar Charts...');
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('[administracao-logic.js] DOM completamente carregado. Inicializando gráficos...');
   try {
     const chartVisaoGeralEl = document.getElementById('chartVisaoGeral');
     if (chartVisaoGeralEl) {
@@ -71,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('[administracao-logic.js] Chart Visão Geral inicializado.');
     } else {
-      console.warn('[administracao-logic.js] Canvas #chartVisaoGeral não encontrado.');
+      console.warn('[administracao-logic.js] Elemento canvas chartVisaoGeral não encontrado.');
     }
 
     const chartResumoMensalEl = document.getElementById('chartResumoMensal');
@@ -85,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('[administracao-logic.js] Chart Resumo Mensal inicializado.');
     } else {
-      console.warn('[administracao-logic.js] Canvas #chartResumoMensal não encontrado.');
+      console.warn('[administracao-logic.js] Elemento canvas chartResumoMensal não encontrado.');
     }
 
     const chartIndicadoresEl = document.getElementById('chartIndicadores');
@@ -99,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('[administracao-logic.js] Chart Indicadores inicializado.');
     } else {
-      console.warn('[administracao-logic.js] Canvas #chartIndicadores não encontrado.');
+      console.warn('[administracao-logic.js] Elemento canvas chartIndicadores não encontrado.');
     }
   } catch (e) {
-    console.error('[administracao-logic.js] Erro durante a inicialização dos Charts:', e);
+    console.error('[administracao-logic.js] Erro ao inicializar Charts:', e);
   }
-  console.log('[administracao-logic.js] Fim do listener DOMContentLoaded.');
+  console.log('[administracao-logic.js] Inicialização de gráficos finalizada.');
 });

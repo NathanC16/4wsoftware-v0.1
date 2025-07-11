@@ -45,10 +45,12 @@ app.use(helmet({
         "'sha256-q/qn3w3Qs/CNAZZ5fzowHaEhlWteyigYml/z2rYJJXc='", // script controles nav em home.html
         // "'sha256-BMDcFQYigfMZ1XBbjdo6vgOxomS/mJTSQUzT0mkhAs4='",  // Removido - Duplicata/Antigo para script da linha 79 home.html
 
-        // Hashes para scripts inline em administracao.html - ATUALIZADOS (rodada final)
-        "'sha256-o3KPeo6Bns/OS7ra33XMtcYSrNDlvhLyY+0nO3PLbNg='", // Novo hash para script ~linha 249 (toggleSection, Charts)
-        "'sha256-NhvjykiwnB7p10oxDeG68iOdeuluB+fBMutJgZKzOLI='", // Novo hash para script ~linha 315 (módulo principal)
-        // Hashes antigos para administracao.html ('1nFBC...', 'FEyIz...', 'zIxNO...') removidos.
+        // Hashes para scripts inline em administracao.html
+        // Removidos:
+        // "'sha256-o3KPeo6Bns/OS7ra33XMtcYSrNDlvhLyY+0nO3PLbNg='", // Era para toggleSection e Charts, agora em arquivo externo
+        // "'sha256-NhvjykiwnB7p10oxDeG68iOdeuluB+fBMutJgZKzOLI='", // Era para módulo principal em administracao.html, que não precisa mais de hash específico se o conteúdo não mudou ou se é coberto por 'self' para scripts externos.
+        // Adicionado novo hash para o script inline do toggle da sidebar em administracao.html:
+        "'sha256-FIIxVPEdESv9M2M92PzG649S1Jt6n2y7d8Hk+9EUDjY='", // Script do DOMContentLoaded para sidebar-toggle-button
 
         // Hashes para scripts inline em home.html (mantidos)
         "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // script de cards em home.html (linha 95)
