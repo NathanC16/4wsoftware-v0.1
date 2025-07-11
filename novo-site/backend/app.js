@@ -51,6 +51,7 @@ app.use(helmet({
         // Adicionados os hashes corretos para os scripts inline em administracao.html, conforme sugerido pelos logs:
         "'sha256-mIQoxVBWO+0+oQcXAzj3HWb/l3/BbLRYs3mcpmLqlj8='", // Para o script de módulo em administracao.html
         "'sha256-p3oZ2jVCGOGFztlnSMO9wDOEOAtU6Dt3bmpYUw6SIgk='", // Para o script DOMContentLoaded do sidebar-toggle em administracao.html
+        "'sha256-NsWuaw4Kdsk1NWeSU8OuhW6lGUxr2VBgMOMoQFOiykw='", // Para o script de módulo em userdados.html
 
         // Hashes para scripts inline em home.html (mantidos)
         "'sha256-mmrIG8b8rg2RPIi9t8jV4lmPxmaLz8tH4OADQnidrMQ='",   // script de cards em home.html (linha 95)
