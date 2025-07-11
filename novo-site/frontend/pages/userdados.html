@@ -10,6 +10,23 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"/>
 
   <style>
+    .btn-voltar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 8px 15px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      z-index: 1001; /* Acima do header da página se necessário */
+    }
+    .btn-voltar:hover {
+      background-color: #5a6268;
+    }
     body {
       font-family: Arial, sans-serif;
       background-image: url('../assets/img/hidroeletrica.jpg');
@@ -70,6 +87,7 @@
   </style>
 </head>
 <body>
+<button onclick="window.history.back()" class="btn-voltar">Voltar</button>
   <header>
 
     <h1> <img src="../assets/img/4wlogo.jpg" alt="Logo" height="40"> Dados dos Clientes - 4W Ecossistema Energia</h1>
