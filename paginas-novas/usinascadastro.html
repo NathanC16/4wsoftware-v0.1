@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Usinas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('images/4w-about.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #15803d;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      color: #065f46;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #16a34a;
+      color: white;
+      border: none;
+      margin-top: 2rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #15803d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cadastro de Usinas</h2>
+    <form id="cadastro-usina-form">
+      <label for="nome">Nome da Usina</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="tipo">Tipo de Usina</label>
+      <select id="tipo" name="tipo" required>
+        <option value="">Selecione o tipo</option>
+        <option value="Solar">Solar</option>
+        <option value="Hídrica">Hídrica</option>
+        <option value="Biogás">Biogás</option>
+      </select>
+
+      <label for="cooperativa">Cooperativa</label>
+      <select id="cooperativa" name="cooperativa" required>
+        <option value="">Selecione a cooperativa</option>
+        <option value="4W ENERGIA">4W ENERGIA</option>
+        <option value="Chico Solar">Chico Solar</option>
+        <option value="COOGER">COOGER</option>
+      </select>
+
+      <button type="submit">Cadastrar Usina</button>
+    </form>
+  </div>
+  <script>
+    document.getElementById('cadastro-usina-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const tipo = document.getElementById('tipo').value;
+      const cooperativa = document.getElementById('cooperativa').value;
+
+      try {
+        const resposta = await fetch('/api/usinas', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ nome, tipo, cooperativa })
+        });
+
+        if (resposta.ok) {
+          alert('Usina cadastrada com sucesso!');
+          document.getElementById('cadastro-usina-form').reset();
+        } else {
+          alert('Erro ao cadastrar usina.');
+        }
+      } catch (error) {
+        alert('Erro de conexão com o servidor.');
+      }
+    });
+  </script>
+  <div id="app"></div>
+
+  <script src="router.js"></script>
+</body>
+</html>

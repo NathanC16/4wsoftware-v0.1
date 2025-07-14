@@ -1,0 +1,73 @@
+.pagamentos-container {
+  background: #f7f9fb;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.pagamentos-container h1 {
+  color: #28a745; /* verde característico da 4W */
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.pagamentos-container p {
+  text-align: center;
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: #28a745;
+  color: white;
+  padding: 1rem;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+.sidebar-open {
+  left: 0;
+}
+.btn-sidebar-open {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.25rem;
+  border-radius: 4px;
+  z-index: 1100;
+  cursor: pointer;
+}
+.btn-sidebar-close {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  float: right;
+  cursor: pointer;
+}
+.sidebar nav ul {
+  list-style: none;
+  padding: 2rem 0 0;
+  margin: 0;
+}
+.sidebar nav li {
+  margin: 1rem 0;
+}
+.sidebar nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+.sidebar nav a:hover {
+  text-decoration: underline;
+}

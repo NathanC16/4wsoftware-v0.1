@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('images/4w.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-container h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-group button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    #mensagem {
+      margin-top: 1rem;
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="id-usuario">ID do Usuário</label>
+        <input type="text" id="id-usuario" name="idUsuario" required />
+      </div>
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required />
+      </div>
+      <div class="form-group">
+        <button type="submit">Entrar</button>
+      </div>
+      <div id="mensagem"></div>
+    </form>
+  </div>
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('login-form');
+    const mensagemEl = document.getElementById('mensagem');
+
+    if (!form) {
+      console.error("Formulário não encontrado.");
+      return;
+    }
+
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      mensagemEl.textContent = '';
+
+      const idUsuario = document.getElementById('id-usuario').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if (!idUsuario || !senha) {
+        mensagemEl.textContent = 'Por favor, preencha o ID do usuário e a senha.';
+        return;
+      }
+
+      try {
+        const resposta = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ idUsuario, senha })
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+          localStorage.setItem('token', dados.token);
+          form.reset();
+          window.location.href = dados.destino || '/home.html';
+        } else {
+          mensagemEl.textContent = dados.mensagem || 'Erro no login.';
+        }
+      } catch (err) {
+        console.error('Erro ao conectar com o servidor:', err);
+        mensagemEl.textContent = 'Não foi possível conectar-se ao servidor.';
+      }
+    });
+  });
+</script>
+  <script>
+    // Verifica se o usuário já está logado
+    if (localStorage.getItem('token')) {
+      window.location.href = '/home.html'; // Redireciona para a página inicial
+    }
+  </script>
+</body>
+</html>
