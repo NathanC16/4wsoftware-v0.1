@@ -42,7 +42,7 @@ const MONGO_URI = process.env.MONGO_URI;
 mongoose.set('strictQuery', false);
 
 // Middlewares de segurança
-app.use(helmet()); // cabeçalhos HTTP seguros
+// app.use(helmet()); // cabeçalhos HTTP seguros
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 1000, // Aumentado para 1000 requisições durante o desenvolvimento
