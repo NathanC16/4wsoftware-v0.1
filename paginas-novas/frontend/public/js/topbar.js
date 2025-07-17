@@ -1,0 +1,56 @@
+import { logout as authLogout } from '../assets/js/auth.js';
+
+export function renderTopbar(containerId) {
+  const container = document.getElementById(containerId);
+
+  const nav = document.createElement('nav');
+  nav.className = 'navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow';
+
+  const loggedInUser = getLoggedInUser();
+  const userName = loggedInUser ? loggedInUser.usuario : 'Usuário';
+  const userProfilePic = loggedInUser && loggedInUser.profilePic ? loggedInUser.profilePic : '/assets/img/user-placeholder.jpg';
+
+  nav.innerHTML = `
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3">
+      <i class="fa fa-bars"></i>
+    </button>
+    <span class="navbar-brand mb-0 h1 text-success">Painel Administrativo</span>
+    <ul class="navbar-nav ms-auto position-relative">
+      <li class="nav-item dropdown no-arrow">
+        <button id="perfilToggle" class="nav-link btn btn-link dropdown-toggle">
+          <span class="me-2 d-none d-lg-inline text-gray-600 small">Olá, ${userName}</span>
+          <img class="img-profile rounded-circle" src="${userProfilePic}" alt="usuária" />
+        </button>
+        <div id="perfilMenu" class="dropdown-menu dropdown-menu-end shadow animated--grow-in" style="display: none; position: absolute; right: 0; top: 100%;">
+          <button class="dropdown-item" id="profile-button"><i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>Perfil</button>
+          <button class="dropdown-item" id="settings-button"><i class="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Configurações</button>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" id="logout-button-dropdown"><i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>Sair</button>
+        </div>
+      </li>
+    </ul>
+  `;
+
+  container.appendChild(nav);
+
+  nav.querySelector('#perfilToggle').addEventListener('click', () => {
+    const menu = nav.querySelector('#perfilMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Adicionar event listeners para os botões do dropdown
+  nav.querySelector('#profile-button').addEventListener('click', () => {
+    console.log('Botão Perfil clicado! Redirecionando para visualizadoridividual.html');
+    window.location.href = 'visualizadoridividual.html';
+  });
+
+  nav.querySelector('#settings-button').addEventListener('click', () => {
+    console.log('Botão Configurações clicado! Redirecionando para userdados.html');
+    window.location.href = 'userdados.html';
+  });
+
+  nav.querySelector('#logout-button-dropdown').addEventListener('click', () => {
+    console.log('Botão Sair do dropdown clicado! Chamando authLogout().');
+    authLogout();
+  });
+}

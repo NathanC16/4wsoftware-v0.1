@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cliente - Detalhes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('./images/hidroeletrica.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #218838;
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+    }
+    nav {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 0.5rem 1rem;
+      font-size: 1.1rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+    main {
+      padding: 2em;
+      width: 100%;
+      max-width: 960px;
+      margin: 2em auto;
+      flex: 1;
+      background-color: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    }
+    h2 {
+      color: #218838;
+      margin-bottom: 1.5em;
+    }
+    .dados-container {
+      padding: 2em;
+      border-radius: 8px;
+    }
+    .campo {
+      margin-bottom: 1em;
+    }
+    .campo label {
+      display: block;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.3em;
+    }
+    .campo span, .campo input {
+      display: block;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .campo input {
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 0.75em 1.5em;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .acoes {
+      text-align: right;
+      margin-top: 2em;
+    }
+    #editSection {
+      display: none;
+    }
+    .voltar {
+      margin-top: 1.5em;
+      display: flex;
+      justify-content: flex-start;
+    }
+    #loading {
+      text-align: center;
+      font-weight: bold;
+      padding: 1em;
+      display: none;
+    }
+    #errorMessage {
+      color: red;
+      font-weight: bold;
+      margin-bottom: 1em;
+      display: none;
+    }
+    @media (max-width: 600px) {
+      main, .dados-container {
+        padding: 1em;
+      }
+      .acoes {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><img src="./assets/img/4w-logo.png" alt="Logo" height="40"> Detalhes do Cliente</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li><a href="userdados.html">Visualizar Cliente</a></li>
+    </ul>
+  </nav>
+  <main>
+    <div id="loading">Carregando...</div>
+    <div id="errorMessage"></div>
+    <div class="dados-container" id="viewSection">
+      <h2>Informações</h2>
+      <div class="campo"><label>ID</label><span id="idView"></span></div>
+      <div class="campo"><label>Nome</label><span id="nomeView"></span></div>
+      <div class="campo"><label>UC</label><span id="ucView"></span></div>
+      <div class="campo"><label>Contrato</label><span id="contratoView"></span></div>
+      <div class="campo"><label>Usina</label><span id="usinaView"></span></div>
+      <div class="campo"><label>Modalidade</label><span id="modalidadeView"></span></div>
+      <div class="campo"><label>Parceiro</label><span id="parceiroView"></span></div>
+      <div class="campo"><label>Contrato Parceiro</label><span id="contratoParceiroView"></span></div>
+      <div class="campo"><label>Desconto</label><span id="descontoView"></span></div>
+      <div class="campo"><label>Email</label><span id="emailView"></span></div>
+      <div class="acoes">
+        <button type="button" id="edit-button">Editar</button>
+      </div>
+    </div>
+    <div class="dados-container" id="editSection">
+      <h2>Editar Informações</h2>
+      <div class="campo"><label for="idEdit">ID</label><input id="idEdit" readonly /></div>
+      <div class="campo"><label for="nomeEdit">Nome</label><input id="nomeEdit" /></div>
+      <div class="campo"><label for="ucEdit">UC</label><input id="ucEdit" /></div>
+      <div class="campo"><label for="contratoEdit">Contrato</label><input id="contratoEdit" /></div>
+      <div class="campo"><label for="usinaEdit">Usina</label><input id="usinaEdit" /></div>
+      <div class="campo"><label for="modalidadeEdit">Modalidade</label><input id="modalidadeEdit" /></div>
+      <div class="campo"><label for="parceiroEdit">Parceiro</label><input id="parceiroEdit" /></div>
+      <div class="campo"><label for="contratoParceiroEdit">Contrato Parceiro</label><input id="contratoParceiroEdit" /></div>
+      <div class="campo"><label for="descontoEdit">Desconto (%)</label><input id="descontoEdit" type="number" min="0" max="100" /></div>
+      <div class="campo"><label for="emailEdit">Email</label><input id="emailEdit" type="email" /></div>
+      <div class="acoes">
+        <button type="button" id="save-button">Salvar Alterações</button>
+        <button type="button" id="cancel-button">Cancelar</button>
+      </div>
+    </div>
+    <div class="dados-container" id="uploadSection" style="margin-top: 2em;">
+      <h2>Foto de Perfil</h2>
+      <form id="upload-form">
+        <div class="campo">
+          <label for="profilePic">Escolha uma foto de perfil:</label>
+          <input type="file" id="profilePic" name="profilePic" accept="image/*">
+        </div>
+        <button type="submit">Fazer Upload</button>
+      </form>
+    </div>
+    <div class="voltar">
+      <button type="button" id="back-button">Voltar para Home</button>
+    </div>
+  </main>
+  <script type="module" src="./js/visualizadoridividual-logic.js"></script>
+  <script type="module" src="./js/visualizadoridividual-upload.js"></script>
+  <script type="module" src="./js/auth-guard.js"></script>
+</body>
+</html>

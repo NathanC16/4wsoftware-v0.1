@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bem-vindo ao Ecossistema Energia</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('./images/4w-about.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      margin-top: 60px;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-title {
+      font-weight: 700;
+      color: #1b5e20;
+    }
+    .card-text {
+      color: #4e4e4e;
+    }
+    .welcome-text {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      color: #1b5e20;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      border: none;
+    }
+    .btn-success:hover {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background-color: rgba(255,255,255,0.9);
+      margin: 0;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 1.1rem; /* Aumenta o tamanho da fonte do menu */
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #1b5e20;
+      font-weight: 600;
+    }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+    .dropdown-menu a {
+      color: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="faturamentos.html">Faturamentos</a></li>
+      <li><a href="financeiro.html">Financeiro</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Históricos</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="historicocomissionados.html">Comissionados</a></li>
+          <li><a class="dropdown-item" href="historico-completo.html">Completo</a></li>
+          <li><a class="dropdown-item" href="historicofaturas.html">Faturas</a></li>
+          <li><a class="dropdown-item" href="historico-inadimplentes.html">Inadimplentes</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Cadastro</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="cadastro.html">Cadastro Geral</a></li>
+          <li><a class="dropdown-item" href="cadastroind.html">Cadastro Indicador</a></li>
+          <li><a class="dropdown-item" href="usinascadastro.html">Cadastro de Usinas</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Clientes</a>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="visualizadoridividual.html">Visualização Individual</a></li>
+          <li><a class="dropdown-item" href="userdados.html">Dados do Usuário</a></li>
+          <li><a class="dropdown-item" href="comissionados.html">Visualização de Indicador</a></li>
+          <li><a class="dropdown-item" href="indicados.html">Lista de Indicados</a></li>
+        </ul>
+      </li>
+      <li><a href="admin-panel.html">Administração</a></li>
+      <li><a href="login4w.html">Login</a></li>
+      <li><a href="index.html" onclick="logout()">Sair</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2 class="welcome-text">Olá, bem-vindo ao Painel Ecossistema Energia ⚡</h2>
+    <div class="row" id="cardContainer"></div>
+  </div>
+
+  <div id="user-info" style="padding: 1rem 2rem; color: #1b5e20; font-weight: 600;"></div>
+
+  <script>
+    const usuario = {
+      nome: 'João Silva',
+      tipo: 'admin'
+    };
+
+    const cards = [
+      { titulo: 'Dashboard', descricao: 'Acesse sua visão geral', rota: 'userdados.html' },
+      { titulo: 'Faturas', descricao: 'Visualize suas faturas', rota: 'historicofaturas.html' },
+      { titulo: 'Consumo', descricao: 'Veja seus dados de consumo', rota: 'historico-inadimplentes.html' },
+      { titulo: 'Histórico Completo', descricao: 'Visualize suas comissões detalhadas', rota: 'historicocomissionados.html' },
+      { titulo: 'Cadastro', descricao: 'Cadastrar novos comissionados', rota: 'cadastro.html' },
+      { titulo: 'Cadastro de Usinas', descricao: 'Gerencie suas usinas', rota: 'usinascadastro.html' },
+      { titulo: 'Ajuda', descricao: 'Precisa de suporte?', rota: 'ajuda.html' }
+    ];
+
+    const container = document.getElementById('cardContainer');
+    cards.forEach(card => {
+      const div = document.createElement('div');
+      div.className = 'col-md-4 mb-4';
+      div.innerHTML = `
+        <div class="card h-100">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title">${card.titulo}</h5>
+              <p class="card-text">${card.descricao}</p>
+            </div>
+            <a href="${card.rota}" class="btn btn-success mt-3">Acessar</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'login4w.html';
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const usuario = payload.usuario;
+        const permissoes = payload.permissions || [];
+
+        document.getElementById('user-info').innerHTML = `
+          <p>Bem-vindo, <strong>${usuario}</strong></p>
+          <p>Permissões: ${permissoes.join(', ')}</p>
+          <button onclick="logout()" class="btn btn-danger btn-sm">Sair</button>
+        `;
+      } catch (err) {
+        console.error('Erro ao decodificar token:', err);
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

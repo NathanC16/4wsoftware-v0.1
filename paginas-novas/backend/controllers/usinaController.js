@@ -6,13 +6,19 @@ import Usina from '../models/Usina.js';
 // Criar uma nova usina
 export const criarUsina = async (req, res) => {
   try {
-    const { nome, cidade, tipo } = req.body;
+    const { nome, cidade, estado, tipo } = req.body;
 
-    if (!nome || !cidade || !tipo) {
-      return res.status(400).json({ erro: 'Nome, cidade e tipo da usina são obrigatórios.' });
+    if (!nome || !cidade || !estado || !tipo) {
+      return res.status(400).json({ erro: 'Nome, cidade, estado e tipo da usina são obrigatórios.' });
     }
 
-    const novaUsina = new Usina(req.body);
+    const novaUsina = new Usina({
+      nome,
+      cidade,
+      estado,
+      tipoEnergia: tipo // Mapeia 'tipo' do frontend para 'tipoEnergia' no modelo
+    });
+
     await novaUsina.save();
     res.status(201).json(novaUsina);
   } catch (error) {

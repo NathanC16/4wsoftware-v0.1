@@ -1,0 +1,21 @@
+.pagamentos-container {
+  background: #f7f9fb;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.pagamentos-container h1 {
+  color: #28a745; /* verde característico da 4W */
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.pagamentos-container p {
+  text-align: center;
+  color: #333;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}

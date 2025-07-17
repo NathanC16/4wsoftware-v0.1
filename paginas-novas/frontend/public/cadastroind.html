@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Indicadores</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('images/vaquinhas.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.65); /* <-- Clareado aqui */
+      border-radius: 16px;
+      box-shadow: 0 0 20px #4caf50;
+    }
+
+    h1 {
+      text-align: center;
+      color: #b6f7c1;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #a5d6a7;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input[type="file"] {
+      background-color: #fff;
+    }
+
+    .full {
+      grid-column: 1 / 3;
+    }
+
+    .button-container {
+      grid-column: 1 / 3;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    button {
+      background-color: #66bb6a;
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #43a047;
+    }
+
+    @media (max-width: 768px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      .button-container {
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cadastro de Indicadores</h1>
+    <form id="form-indicador"> <!-- CORRIGIDO AQUI -->
+      <!-- Dados Gerais -->
+      <div>
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" name="tipo" required>
+          <option value="">Selecione</option>
+          <option value="pf">Pessoa Física</option>
+          <option value="pj">Pessoa Jurídica</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="id">ID do Indicador:</label>
+        <input type="text" id="id" name="id" placeholder="Ex: IND001" required />
+      </div>
+
+      <div>
+        <label for="nome">Nome Completo / Razão Social:</label>
+        <input type="text" id="nome" name="nome" required />
+      </div>
+
+      <div>
+        <label for="fantasia">Nome Fantasia (PJ):</label>
+        <input type="text" id="fantasia" name="fantasia" />
+      </div>
+
+      <div>
+        <label for="cpfcnpj">CPF/CNPJ:</label>
+        <input type="text" id="cpfcnpj" name="cpfcnpj" required />
+      </div>
+
+      <div>
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" />
+      </div>
+
+      <div class="full">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" />
+      </div>
+
+      <!-- Documentos -->
+      <div>
+        <label for="documentos">Documentos:</label>
+        <input type="file" id="documentos" name="documentos" multiple />
+      </div>
+
+      <div>
+        <label for="contrato">Contrato Anexado:</label>
+        <input type="file" id="contrato" name="contrato" />
+      </div>
+
+      <!-- Financeiro -->
+      <div>
+        <label for="dadosbancarios">Dados Bancários:</label>
+        <input type="text" id="dadosbancarios" name="dadosbancarios" placeholder="Banco, agência, conta" />
+      </div>
+
+      <div>
+        <label for="porcentagem">Porcentagem sobre kWh (%):</label>
+        <input type="number" step="0.1" id="porcentagem" name="porcentagem" placeholder="Ex: 2.5" />
+      </div>
+
+      <div>
+        <label for="contratoNum">Número do Contrato:</label>
+        <input type="text" id="contratoNum" name="contratoNum" />
+      </div>
+
+      <!-- Botões -->
+      <div class="button-container">
+        <button type="submit">Salvar Indicador</button>
+        <button type="reset">Limpar</button>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="./js/cadastroind-logic.js"></script>
+  <script type="module" src="./js/auth-guard.js"></script>
+</body>
+</html>

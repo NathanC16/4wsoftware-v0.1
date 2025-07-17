@@ -1,6 +1,7 @@
 // backend/routes/dashboard.js
 import express from 'express';
 import { authenticateToken, authorizePermissions } from '../middlewares/authMiddleware.js';
+import { getDashboardData } from '../controllers/dashboardController.js';
 
 const router = express.Router();
 
@@ -13,5 +14,7 @@ router.get('/dashboard', authenticateToken, authorizePermissions(['podeAcessarDa
     res.status(500).json({ mensagem: 'Erro interno no servidor.' });
   }
 });
+
+router.get('/data', authenticateToken, authorizePermissions(['podeAcessarDashboard']), getDashboardData);
 
 export default router;

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Indicados do Indicador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('images/usinap.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 98%;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0,0,0,0.85);
+      border-radius: 14px;
+      box-shadow: 0 0 18px #4caf50;
+    }
+
+    h1 {
+      text-align: center;
+      color: #b6f7c1;
+      margin-bottom: 2rem;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .filtros input, .filtros select {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 180px;
+    }
+
+    .filtros button {
+      padding: 0.8rem 1.5rem;
+      background: #66bb6a;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .filtros button:hover {
+      background: #43a047;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: #f1f1f1;
+    }
+
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #4caf50;
+      text-align: left;
+    }
+
+    th {
+      background: #2e7d32;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .btn {
+      padding: 0.6rem 1rem;
+      background: #66bb6a;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background-color: #43a047;
+    }
+
+    .editar-btn {
+      background-color: #fbc02d;
+      color: #000;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .filtros {
+        flex-direction: column;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Indicados do Indicador</h1>
+
+    <div class="filtros">
+      <input type="text" id="busca" placeholder="Buscar por nome ou ID" />
+      <select id="indicador">
+        <option value="">Selecionar Indicador</option>
+        <option value="IND123">IND123 - Fernanda</option>
+        <option value="IND124">IND124 - João</option>
+      </select>
+      <select id="mes">
+        <option value="">Mês</option>
+        <option value="01">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+      </select>
+      <select id="ano">
+        <option value="">Ano</option>
+      </select>
+      <button onclick="filtrar()">Buscar</button>
+    </div>
+
+    <table id="tabela-indicados">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>kWh</th>
+          <th>Valor</th>
+          <th>Status</th>
+          <th>Data Pagamento</th>
+          <th>Contrato</th>
+          <th>% kWh</th>
+          <th>Previsão</th>
+          <th>Editar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div style="margin-top: 1rem;">
+      <button class="btn" onclick="salvar()">Salvar Alterações</button>
+      <button class="btn" onclick="exportarExcel()">Exportar Excel</button>
+      <button class="btn" onclick="exportarPDF()">Exportar PDF</button>
+    </div>
+  </div>
+
+  <script>
+    const dados = [
+      {
+        id: 'DEP001',
+        nome: 'Carlos Lima',
+        telefone: '(11) 90000-1111',
+        email: 'carlos@exemplo.com',
+        kwh: 280,
+        valor: 'R$ 340,00',
+        status: 'Inadimplente',
+        pagamento: '',
+        contrato: 'CTR1001',
+        porcentagem: '2%',
+        previsao: '20/07/2025',
+        indicador: 'IND123',
+        mes: '07',
+        ano: '2025'
+      },
+      {
+        id: 'DEP002',
+        nome: 'Ana Beatriz',
+        telefone: '(21) 92222-3344',
+        email: 'ana@exemplo.com',
+        kwh: 190,
+        valor: 'R$ 220,00',
+        status: 'Pago',
+        pagamento: '10/07/2025',
+        contrato: 'CTR1002',
+        porcentagem: '2%',
+        previsao: '25/07/2025',
+        indicador: 'IND124',
+        mes: '07',
+        ano: '2025'
+      }
+    ];
+
+    function preencherAnos() {
+      const selectAno = document.getElementById('ano');
+      for (let ano = 2025; ano >= 1990; ano--) {
+        const opt = document.createElement('option');
+        opt.value = ano;
+        opt.textContent = ano;
+        selectAno.appendChild(opt);
+      }
+    }
+
+    function carregarTabela(filtrados) {
+      const tbody = document.querySelector("#tabela-indicados tbody");
+      tbody.innerHTML = "";
+
+      if (filtrados.length === 0) {
+        alert("🔍 Nenhum resultado encontrado.");
+        return;
+      }
+
+      filtrados.forEach((dep, index) => {
+        const linha = document.createElement('tr');
+        linha.innerHTML = `
+          <td>${dep.id}</td>
+          <td>${dep.nome}</td>
+          <td>${dep.telefone}</td>
+          <td>${dep.email}</td>
+          <td>${dep.kwh}</td>
+          <td>${dep.valor}</td>
+          <td contenteditable="false">${dep.status}</td>
+          <td contenteditable="false">${dep.pagamento}</td>
+          <td>${dep.contrato}</td>
+          <td contenteditable="false">${dep.porcentagem}</td>
+          <td contenteditable="false">${dep.previsao}</td>
+          <td><button class="editar-btn" onclick="editarLinha(this)">Editar</button></td>
+        `;
+        tbody.appendChild(linha);
+      });
+    }
+
+    function editarLinha(btn) {
+      const linha = btn.closest('tr');
+      const editaveis = linha.querySelectorAll('td[contenteditable]');
+      const estaEditando = btn.innerText === "Salvar";
+
+      if (!estaEditando) {
+        editaveis.forEach(c => c.contentEditable = true);
+        btn.innerText = "Salvar";
+        btn.style.backgroundColor = "#81c784";
+      } else {
+        editaveis.forEach(c => c.contentEditable = false);
+        btn.innerText = "Editar";
+        btn.style.backgroundColor = "#fbc02d";
+        alert("✔️ Alterações salvas na linha!");
+      }
+    }
+
+    function salvar() {
+      const linhas = document.querySelectorAll("#tabela-indicados tbody tr");
+      linhas.forEach((linha, i) => {
+        const celulas = linha.querySelectorAll("td");
+        dados[i].status = celulas[6].innerText;
+        dados[i].pagamento = celulas[7].innerText;
+        dados[i].porcentagem = celulas[9].innerText;
+        dados[i].previsao = celulas[10].innerText;
+      });
+
+      alert("💾 Alterações salvas com sucesso!");
+    }
+
+    function filtrar() {
+      const busca = document.getElementById('busca').value.toLowerCase();
+      const indicador = document.getElementById('indicador').value;
+      const mes = document.getElementById('mes').value;
+      const ano = document.getElementById('ano').value;
+
+      const resultado = dados.filter(d => {
+        const nomeOuId = `${d.nome} ${d.id}`.toLowerCase();
+        return (
+          (!busca || nomeOuId.includes(busca)) &&
+          (!indicador || d.indicador === indicador) &&
+          (!mes || d.mes === mes) &&
+          (!ano || d.ano === ano)
+        );
+      });
+
+      carregarTabela(resultado);
+    }
+
+    function exportarExcel() {
+      const tabela = document.getElementById("tabela-indicados").outerHTML;
+      const blob = new Blob(["\uFEFF" + tabela], { type: 'application/vnd.ms-excel' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'indicados.xls';
+      link.click();
+    }
+
+    async function exportarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const tabela = document.querySelector("#tabela-indicados");
+      const canvas = await html2canvas(tabela, { scale: 2 });
+
+      const imgData = canvas.toDataURL('image/png');
+      const imgProps = doc.getImageProperties(imgData);
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      doc.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight);
+      doc.save("indicados.pdf");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      preencherAnos();
+      carregarTabela(dados);
+    });
+  </script>
+  <script type="module" src="./js/auth-guard.js"></script>
+</body>
+</html>

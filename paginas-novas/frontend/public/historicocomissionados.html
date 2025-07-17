@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Histórico de Comissionados Detalhado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('images/usinap.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    .container {
+      max-width: 98%;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0,0,0,0.85);
+      border-radius: 14px;
+      box-shadow: 0 0 18px #4caf50;
+    }
+    h1 {
+      text-align: center;
+      color: #b6f7c1;
+      margin-bottom: 2rem;
+    }
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .filtros select {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 180px;
+      color: #000;
+    }
+    .filtros button {
+      padding: 0.8rem 1.5rem;
+      background: #66bb6a;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .filtros button:hover {
+      background: #43a047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: #f1f1f1;
+    }
+    th, td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #4caf50;
+      text-align: left;
+      vertical-align: middle;
+    }
+    th {
+      background: #2e7d32;
+    }
+    tr:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .btn {
+      padding: 0.6rem 1rem;
+      background: #66bb6a;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background-color: #43a047;
+    }
+    .editar-btn {
+      background-color: #fbc02d;
+      color: #000;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+    }
+    .dependentes-container {
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      display: none;
+    }
+    .dependentes-container table {
+      margin-top: 0;
+      color: #000;
+      background: #e8f5e9;
+      border-radius: 10px;
+    }
+    .dependentes-container th, .dependentes-container td {
+      color: #000;
+      border: 1px solid #4caf50;
+      padding: 0.6rem;
+      text-align: left;
+    }
+    .expand-btn {
+      background: transparent;
+      border: none;
+      color: #66bb6a;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    .expand-btn:hover {
+      color: #43a047;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Histórico de Comissionados Detalhado</h1>
+
+    <div class="filtros">
+      <select id="indicadorFiltro">
+        <option value="">Selecionar Indicador</option>
+        <option value="IND123">IND123 - Fernanda</option>
+        <option value="IND124">IND124 - João</option>
+      </select>
+
+      <select id="mesFiltro">
+        <option value="">Mês</option>
+        <option value="01">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+      </select>
+
+      <select id="anoFiltro">
+        <option value="">Ano</option>
+      </select>
+
+      <button onclick="filtrarHistorico()">Buscar</button>
+    </div>
+
+    <table id="tabelaHistorico">
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Total kWh</th>
+          <th>Valor Comissão</th>
+          <th>Data Início</th>
+          <th>Data Fim</th>
+          <th>Status Pagamento</th>
+          <th>Editar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div style="margin-top: 1rem;">
+      <button class="btn" onclick="salvarHistorico()">Salvar Alterações</button>
+      <button class="btn" onclick="exportarExcelHistorico()">Exportar Excel</button>
+      <button class="btn" onclick="exportarPDFHistorico()">Exportar PDF</button>
+    </div>
+  </div>
+
+  <script>
+    const historicoDados = [
+      {
+        id: 'IND123',
+        nome: 'Fernanda',
+        dataInicio: '01/06/2025',
+        dataFim: '30/06/2025',
+        mes: '06',
+        ano: '2025',
+        statusPagamento: 'Pago',
+        dependentes: [
+          { id: 'DEP001', nome: 'Carlos Lima', kwh: 280, porcentagem: 2, valorComissao: 340 * 0.02, statusPagamento: 'Pago' },
+          { id: 'DEP002', nome: 'Ana Beatriz', kwh: 190, porcentagem: 2, valorComissao: 220 * 0.02, statusPagamento: 'Pago' },
+          { id: 'DEP003', nome: 'João Silva', kwh: 150, porcentagem: 1.5, valorComissao: 180 * 0.015, statusPagamento: 'Pendente' }
+        ]
+      },
+      {
+        id: 'IND124',
+        nome: 'João',
+        dataInicio: '01/06/2025',
+        dataFim: '30/06/2025',
+        mes: '06',
+        ano: '2025',
+        statusPagamento: 'Pendente',
+        dependentes: [
+          { id: 'DEP004', nome: 'Maria Clara', kwh: 400, porcentagem: 3, valorComissao: 500 * 0.03, statusPagamento: 'Pago' },
+          { id: 'DEP005', nome: 'Pedro Santos', kwh: 350, porcentagem: 2.5, valorComissao: 430 * 0.025, statusPagamento: 'Pendente' }
+        ]
+      }
+    ];
+
+    function preencherAnosFiltro() {
+      const selectAno = document.getElementById('anoFiltro');
+      for(let ano = 2025; ano >= 1990; ano--) {
+        const opt = document.createElement('option');
+        opt.value = ano;
+        opt.textContent = ano;
+        selectAno.appendChild(opt);
+      }
+    }
+
+    function formatarValor(valor){
+      return "R$ " + valor.toFixed(2).replace('.', ',');
+    }
+
+    function calcularTotalComissao(dependentes){
+      return dependentes.reduce((acc, d) => acc + d.valorComissao, 0);
+    }
+
+    function criarLinhaComissionado(item, index){
+      const totalComissao = calcularTotalComissao(item.dependentes);
+      const tr = document.createElement('tr');
+
+      // Cria uma célula com botão para expandir dependentes
+      const expandCell = document.createElement('td');
+      const btnExpand = document.createElement('button');
+      btnExpand.textContent = '+';
+      btnExpand.className = 'expand-btn';
+      btnExpand.onclick = () => toggleDependentes(index);
+      expandCell.appendChild(btnExpand);
+
+      tr.appendChild(expandCell);
+
+      tr.innerHTML += `
+        <td>${item.id}</td>
+        <td>${item.nome}</td>
+        <td>${item.dependentes.reduce((acc, d) => acc + d.kwh, 0)}</td>
+        <td>${formatarValor(totalComissao)}</td>
+        <td>${item.dataInicio}</td>
+        <td>${item.dataFim}</td>
+        <td contenteditable="false">${item.statusPagamento}</td>
+        <td><button class="editar-btn" onclick="editarLinhaHistorico(this)">Editar</button></td>
+      `;
+      return tr;
+    }
+
+    function criarTabelaDependentes(dependentes, index){
+      const div = document.createElement('div');
+      div.className = 'dependentes-container';
+      div.id = `dependentes-${index}`;
+
+      const tabela = document.createElement('table');
+      tabela.innerHTML = `
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome Dependente</th>
+            <th>kWh</th>
+            <th>% Comissão</th>
+            <th>Valor Comissão</th>
+            <th>Status Pagamento</th>
+            <th>Editar</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      `;
+
+      dependentes.forEach((dep, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${dep.id}</td>
+          <td>${dep.nome}</td>
+          <td>${dep.kwh}</td>
+          <td contenteditable="false">${dep.porcentagem}%</td>
+          <td>${formatarValor(dep.valorComissao)}</td>
+          <td contenteditable="false">${dep.statusPagamento}</td>
+          <td><button class="editar-btn" onclick="editarDependente(this, ${index}, ${i})">Editar</button></td>
+        `;
+        tabela.querySelector('tbody').appendChild(tr);
+      });
+
+      div.appendChild(tabela);
+      return div;
+    }
+
+    function carregarTabelaHistorico(filtrados){
+      const tbody = document.querySelector("#tabelaHistorico tbody");
+      tbody.innerHTML = "";
+      // Remove dependentes containers se tiver algum aberto
+      document.querySelectorAll('.dependentes-container').forEach(div => div.remove());
+
+      if(filtrados.length === 0){
+        alert("🔍 Nenhum registro encontrado.");
+        return;
+      }
+
+      filtrados.forEach((item, idx) => {
+        const tr = criarLinhaComissionado(item, idx);
+        tbody.appendChild(tr);
+
+        // cria a div com dependentes e esconde
+        const dependentesDiv = criarTabelaDependentes(item.dependentes, idx);
+        tbody.parentNode.insertBefore(dependentesDiv, tbody.nextSibling);
+      });
+    }
+
+    function toggleDependentes(index){
+      const div = document.getElementById(`dependentes-${index}`);
+      if(div.style.display === 'block'){
+        div.style.display = 'none';
+        // muda o botão para "+"
+        const btn = document.querySelectorAll('.expand-btn')[index];
+        if(btn) btn.textContent = '+';
+      } else {
+        div.style.display = 'block';
+        // muda o botão para "-"
+        const btn = document.querySelectorAll('.expand-btn')[index];
+        if(btn) btn.textContent = '−';
+      }
+    }
+
+    function editarLinhaHistorico(btn){
+      const linha = btn.closest('tr');
+      const celulasEditaveis = [6]; // coluna statusPagamento principal
+      const estaEditando = btn.innerText === "Salvar";
+
+      celulasEditaveis.forEach(i => {
+        const td = linha.querySelectorAll('td')[i];
+        td.contentEditable = !estaEditando;
+        td.style.backgroundColor = estaEditando ? '' : '#fff';
+        td.style.color = estaEditando ? '' : '#000';
+      });
+
+      btn.innerText = estaEditando ? "Editar" : "Salvar";
+      btn.style.backgroundColor = estaEditando ? "#fbc02d" : "#81c784";
+
+      if(estaEditando){
+        alert("✔️ Alterações na linha salvas!");
+      }
+    }
+
+    function editarDependente(btn, idxComissionado, idxDependente){
+      const linha = btn.closest('tr');
+      const celulasEditaveis = [5]; // statusPagamento do dependente
+      const estaEditando = btn.innerText === "Salvar";
+
+      celulasEditaveis.forEach(i => {
+        const td = linha.querySelectorAll('td')[i];
+        td.contentEditable = !estaEditando;
+        td.style.backgroundColor = estaEditando ? '' : '#fff';
+        td.style.color = estaEditando ? '' : '#000';
+      });
+
+      btn.innerText = estaEditando ? "Editar" : "Salvar";
+      btn.style.backgroundColor = estaEditando ? "#fbc02d" : "#81c784";
+
+      if(estaEditando){
+        alert("✔️ Alterações no dependente salvas!");
+      }
+    }
+
+    function salvarHistorico(){
+      // Atualiza o objeto JS com o conteúdo das tabelas visíveis (tabela principal + dependentes)
+      const tbody = document.querySelector("#tabelaHistorico tbody");
+      const linhas = tbody.querySelectorAll("tr");
+
+      linhas.forEach((linha, i) => {
+        // status pagamento principal
+        const statusTd = linha.querySelectorAll('td')[6];
+        historicoDados[i].statusPagamento = statusTd.innerText.trim();
+
+        // atualiza status dos dependentes, se a div de dependentes estiver visível
+        const dependentesDiv = document.getElementById(`dependentes-${i}`);
+        if(dependentesDiv && dependentesDiv.style.display === 'block'){
+          const trsDeps = dependentesDiv.querySelectorAll('tbody tr');
+          trsDeps.forEach((tr, idxDep) => {
+            const statusTdDep = tr.querySelectorAll('td')[5];
+            historicoDados[i].dependentes[idxDep].statusPagamento = statusTdDep.innerText.trim();
+          });
+        }
+      });
+      alert("💾 Todas alterações salvas com sucesso!");
+    }
+
+    function filtrarHistorico(){
+      const indicador = document.getElementById('indicadorFiltro').value;
+      const mes = document.getElementById('mesFiltro').value;
+      const ano = document.getElementById('anoFiltro').value;
+
+      const resultado = historicoDados.filter(d => 
+        (!indicador || d.id === indicador) &&
+        (!mes || d.mes === mes) &&
+        (!ano || d.ano === ano)
+      );
+
+      carregarTabelaHistorico(resultado);
+    }
+
+    function exportarExcelHistorico() {
+      // Vamos exportar só a tabela principal + dependentes visíveis concatenados em uma string HTML
+      const tbody = document.querySelector("#tabelaHistorico tbody");
+      const linhas = tbody.querySelectorAll("tr");
+      if(linhas.length === 0){
+        alert("Nada para exportar!");
+        return;
+      }
+
+      let html = `<table border="1" style="border-collapse: collapse; font-size: 12px; color: black; width: 100%;">`;
+      html += `<thead>
+        <tr>
+          <th>ID</th><th>Nome</th><th>Total kWh</th><th>Valor Comissão</th><th>Data Início</th><th>Data Fim</th><th>Status Pagamento</th>
+        </tr>
+      </thead><tbody>`;
+
+      historicoDados.forEach((item, idx) => {
+        html += `<tr>
+          <td>${item.id}</td>
+          <td>${item.nome}</td>
+          <td>${item.dependentes.reduce((acc, d) => acc + d.kwh, 0)}</td>
+          <td>${formatarValor(calcularTotalComissao(item.dependentes))}</td>
+          <td>${item.dataInicio}</td>
+          <td>${item.dataFim}</td>
+          <td>${item.statusPagamento}</td>
+        </tr>`;
+
+        // Só inclui dependentes se estiverem visíveis
+        const dependentesDiv = document.getElementById(`dependentes-${idx}`);
+        if(dependentesDiv && dependentesDiv.style.display === 'block'){
+          html += `<tr><td colspan="7" style="background:#c8e6c9; color:#000;">
+            <strong>Dependentes:</strong>
+            <table border="1" style="border-collapse: collapse; width: 100%; font-size: 11px; color: black; margin-top: 5px;">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Nome Dependente</th><th>kWh</th><th>% Comissão</th><th>Valor Comissão</th><th>Status Pagamento</th>
+                </tr>
+              </thead>
+              <tbody>`;
+
+          item.dependentes.forEach(dep => {
+            html += `<tr>
+              <td>${dep.id}</td>
+              <td>${dep.nome}</td>
+              <td>${dep.kwh}</td>
+              <td>${dep.porcentagem}%</td>
+              <td>${formatarValor(dep.valorComissao)}</td>
+              <td>${dep.statusPagamento}</td>
+            </tr>`;
+          });
+
+          html += `</tbody></table></td></tr>`;
+        }
+      });
+
+      html += '</tbody></table>';
+
+      const blob = new Blob(["\uFEFF" + html], { type: 'application/vnd.ms-excel' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'historico_comissionados_detalhado.xls';
+      link.click();
+    }
+
+    async function exportarPDFHistorico() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt', 'a4');
+
+      // Captura container inteiro com filtros + tabela + dependentes expandidos
+      const container = document.querySelector('.container');
+      const canvas = await html2canvas(container, { scale: 2 });
+
+      const imgData = canvas.toDataURL('image/png');
+      const imgProps = doc.getImageProperties(imgData);
+      const pdfWidth = doc.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      doc.save("historico_comissionados_detalhado.pdf");
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      preencherAnosFiltro();
+      carregarTabelaHistorico(historicoDados);
+    });
+  </script>
+</body>
+</html>

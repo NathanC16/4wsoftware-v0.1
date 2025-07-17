@@ -1,31 +1,30 @@
-// routes/usinaRoutes.js
 import express from 'express';
-import * as usinaController from '../controllers/usinaController.js';
-// Importar authorizePermissions junto com authenticateToken
 import { authenticateToken, authorizePermissions } from '../middlewares/authMiddleware.js';
+import { criarUsina, listarUsinas, obterUsina } from '../controllers/usinaController.js';
 
 const router = express.Router();
 
 /**
  * POST /api/usinas
- * Rota para criar uma nova usina.
- * Requer autenticação e permissão específica.
+ * Cadastrar nova usina (requer autenticação)
  */
-// Adicionado authorizePermissions middleware
-router.post('/', authenticateToken, authorizePermissions(['podeCriarUsina', 'admin']), usinaController.criarUsina);
+router.post(
+  '/',
+  authenticateToken,
+  authorizePermissions(['cadastrarUsina', 'admin']), // opcional
+  criarUsina
+);
 
 /**
  * GET /api/usinas
- * Rota para listar todas as usinas cadastradas.
- * Requer autenticação.
+ * Listar todas as usinas (requer autenticação)
  */
-router.get('/', authenticateToken, usinaController.listarUsinas);
+router.get('/', authenticateToken, listarUsinas);
 
 /**
  * GET /api/usinas/:id
- * Rota para retornar os dados de uma usina específica por ID.
- * Requer autenticação.
+ * Obter usina por ID (requer autenticação)
  */
-router.get('/:id', authenticateToken, usinaController.obterUsina);
+router.get('/:id', authenticateToken, obterUsina);
 
 export default router;

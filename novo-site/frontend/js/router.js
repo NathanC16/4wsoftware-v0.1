@@ -50,6 +50,30 @@ const routes = {
    '/login4w': { // Adicionando rota explícita para login se necessário
     page: 'login4w.html',
     permissions: [] // Página de login geralmente não requer permissão
+  },
+  '/admin-panel': {
+    page: 'admin-panel.html',
+    permissions: []
+  },
+  '/cadastro-individual': {
+    page: 'cadastroind.html',
+    permissions: []
+  },
+  '/comissionados': {
+    page: 'comissionados.html',
+    permissions: []
+  },
+  '/historico-completo': {
+    page: 'historico-completo.html',
+    permissions: []
+  },
+  '/historico-comissionados': {
+    page: 'historicocomissionados.html',
+    permissions: []
+  },
+  '/indicados': {
+    page: 'indicados.html',
+    permissions: []
   }
 };
  function isTokenExpired(token) {

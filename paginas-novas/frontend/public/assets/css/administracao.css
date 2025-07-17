@@ -1,0 +1,175 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
+  margin: 0;
+}
+header {
+  background-color: #2e7d32;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+nav#sidebar-nav { /* Aplicado ID para especificidade */
+  background-color: #388e3c;
+  color: white;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 4rem; /* Ajustado para acomodar o header fixo, se necessário */
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+nav#sidebar-nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+nav#sidebar-nav ul li {
+  padding: 1rem;
+  border-bottom: 1px solid #2e7d32;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+nav#sidebar-nav ul li:hover {
+  background-color: #43a047;
+}
+nav.top-navbar {
+  background-color: #f8f9fa;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  /* Removido margin-left para que ocupe a largura toda e o main ajuste */
+}
+nav.top-navbar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: flex-start;
+}
+nav.top-navbar ul li {
+  padding: 0.5rem 1rem;
+  border-bottom: none;
+}
+nav.top-navbar ul li a {
+  color: #2e7d32;
+  text-decoration: none;
+}
+nav.top-navbar ul li a:hover {
+  color: #1b5e20;
+}
+main {
+  margin-left: 250px; /* Espaço para a sidebar */
+  padding: 2rem;
+  padding-top: 8rem; /* Adicionado padding-top para compensar o header fixo e top-navbar */
+  transition: margin-left 0.3s ease;
+}
+body.sidebar-collapsed nav#sidebar-nav {
+  transform: translateX(-100%);
+}
+body.sidebar-collapsed main {
+  margin-left: 0;
+}
+section {
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: none; /* As seções começam ocultas */
+}
+section.active {
+  display: block; /* Apenas a seção ativa é exibida */
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+h2 {
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+table, th, td {
+  border: 1px solid #ddd;
+}
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+}
+th {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+.red-flag {
+  background-color: #ffebee;
+  color: #c62828;
+  font-weight: bold;
+}
+.chart-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 2rem auto;
+}
+.progress {
+  height: 20px;
+}
+
+/* Ajuste para o header e top-navbar serem fixos e não sobreporem a sidebar ou o conteúdo inicial do main */
+header {
+  position: fixed;
+  top: 0;
+  left: 0; /* Alterado de 'auto' para '0' para alinhar com a sidebar */
+  width: 100%; /* O header ocupa toda a largura */
+  z-index: 102; /* Header acima da sidebar e top-navbar */
+  display: flex; /* Mantido para alinhamento interno */
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav.top-navbar {
+  position: fixed;
+  top: 60px; /* Altura aproximada do header, ajuste conforme necessário */
+  left: 0; /* Alterado para alinhar com a sidebar */
+  width: 100%; /* A top-navbar também ocupa toda a largura */
+  z-index: 101; /* Top-navbar abaixo do header, mas acima do conteúdo */
+  /* margin-left: 250px; /* Removido para que o main controle o margin-left baseado no estado da sidebar */
+}
+
+nav#sidebar-nav {
+  padding-top: 120px; /* Ajustado para começar abaixo do header e da top-navbar */
+  /* height: calc(100vh - 120px);  Se quiser que a sidebar não vá sob o header/top-navbar */
+  /* top: 120px; */ /* Ajuste se não quiser que a sidebar comece do topo 0 */
+}
+
+/* Ajuste para o main quando a sidebar está colapsada e top-navbar é fixa */
+body.sidebar-collapsed main {
+  margin-left: 0;
+  /* padding-top: 5rem; /* Mantido, pois o header e top-navbar ainda ocupam espaço */
+}
+
+/* Ajuste para a top-navbar quando a sidebar está visível */
+body:not(.sidebar-collapsed) nav.top-navbar {
+   margin-left: 250px; /* Adiciona margem à esquerda quando a sidebar está expandida */
+   width: calc(100% - 250px); /* Ajusta a largura */
+}
+
+/* Ajuste para o header quando a sidebar está visível (opcional, se quiser que o header também encolha) */
+body:not(.sidebar-collapsed) header {
+  /* padding-left: 250px; */ /* Se quiser que o conteúdo do header alinhe com o main */
+  /* width: calc(100% - 250px); */
+}
+
+
+#sidebar-toggle-button {
+  z-index: 103; /* Para garantir que o botão de toggle fique acima de tudo */
+  /* Posicionamento do botão toggle pode precisar de ajustes se o header mudar muito */
+}

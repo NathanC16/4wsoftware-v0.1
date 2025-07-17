@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ecossistema de Energia Solar - Plataforma Completa">
+  <title>Ecossistema Energia Solar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <style>
+    body {
+      background: #f7f9fb;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    header {
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 1rem 0;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #28a745;
+    }
+    .nav-link {
+      color: #333;
+      font-weight: 500;
+      margin: 0 10px;
+    }
+    .nav-link:hover {
+      color: #28a745;
+    }
+    /* Tabs highlight: verde claro para o ativo */
+    .nav-tabs .nav-link.active {
+      background: #b2f5c6 !important;
+      color: #218838 !important;
+      border-color: #b2e5c6 #b2e5c6 #fff !important;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .nav-tabs .nav-link {
+      border: 1px solid #b2e5c6 !important;
+      background: #f7f9fb;
+      color: #218838;
+      margin-right: 2px;
+    }
+    section {
+      padding: 4rem 0;
+    }
+    h2 {
+      font-weight: 700;
+      color: #1e7e34;
+    }
+    .form-control, .form-select {
+      border-radius: 0.375rem;
+      margin-bottom: 8px;
+    }
+    .btn-custom {
+      background: #28a745;
+      color: white;
+      font-weight: 600;
+      border-radius: 50px;
+      padding: 0.6rem 2rem;
+      transition: 0.3s ease;
+    }
+    .btn-custom:hover {
+      background: #1e7e34;
+    }
+    footer {
+      background: #155724;
+      color: #ffffff;
+      padding: 2rem 0;
+      text-align: center;
+    }
+    .uc-section {
+      margin-top: 48px;
+      margin-bottom: 32px;
+      padding: 32px 24px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(40,167,69,0.08);
+    }
+    .uc-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #218838;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    .uc-group {
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      padding: 18px 18px 10px 18px;
+      margin-bottom: 18px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(40,167,69,0.04);
+      transition: box-shadow 0.2s;
+    }
+    .uc-group:hover {
+      box-shadow: 0 4px 16px rgba(40,167,69,0.10);
+    }
+    .uc-remove-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+    .uc-remove-btn:hover {
+      background: #b52a37;
+    }
+    .uc-label {
+      font-weight: bold;
+      color: #218838;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      letter-spacing: 0.2px;
+    }
+    .uc-fields-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .uc-fields-row > .form-group {
+      flex: 1 1 180px;
+      min-width: 160px;
+    }
+    .form-group label {
+      font-size: 0.97rem;
+      color: #155724;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .uc-divider {
+      border-top: 1px dashed #bdbdbd;
+      margin: 18px 0 10px 0;
+    }
+    @media (max-width: 768px) {
+      .uc-fields-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .uc-section {
+        padding: 18px 5px;
+      }
+    }
+  </style>
+  <script type="module" src="./js/cadastro-logic.js"></script>
+  <script type="module" src="./js/auth-guard.js"></script>
+</body>
+</html>

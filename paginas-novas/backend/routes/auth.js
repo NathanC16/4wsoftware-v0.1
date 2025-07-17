@@ -20,6 +20,16 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ usuario });
 
+    console.log('DEBUG: Senha recebida (frontend):', senha);
+    if (user) {
+      console.log('DEBUG: Usuário encontrado:', user);
+      console.log('DEBUG: Senha hash no DB:', user.senha);
+      const isMatch = await bcrypt.compare(senha, user.senha);
+      console.log('DEBUG: Resultado da comparação de senha:', isMatch);
+    } else {
+      console.log('DEBUG: Usuário não encontrado.');
+    }
+
     // Segurança: não revelar se o problema foi no usuário ou na senha
     if (!user || !(await bcrypt.compare(senha, user.senha))) {
       return res.status(401).json({ mensagem: 'Credenciais inválidas.' });
@@ -36,7 +46,8 @@ router.post('/login', async (req, res) => {
     res.status(200).json({
       token,
       destino: '/home.html',
-      usuario: user.usuario
+      usuario: user.usuario,
+      permissoes: user.permissoes || []
     });
   } catch (error) {
     console.error('Erro no login:', error);

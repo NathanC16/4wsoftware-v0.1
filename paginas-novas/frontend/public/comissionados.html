@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel de Indicadores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SheetJS para exportar Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- jsPDF para exportar PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('images/usinap.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 95%;
+      margin: 2rem auto;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(6px);
+      overflow-x: auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: #b6f7c1;
+      margin-bottom: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.2rem;
+      color: #f1f1f1;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid #4caf50;
+      text-align: left;
+    }
+
+    th {
+      background-color: #2e7d32;
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+      margin: 1rem 0.5rem 0 0;
+      padding: 0.8rem 1.5rem;
+      font-size: 1.1rem;
+      background-color: #66bb6a;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background-color: #43a047;
+    }
+
+    .editar {
+      background-color: #fbc02d;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .link-dependentes {
+      color: #90caf9;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .link-historico {
+      color: #ffc107;
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .btn-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Comissionados / Indicadores</h1>
+
+    <table id="tabela-indicadores">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>CPF/CNPJ</th>
+          <th>UC</th>
+          <th>Contrato</th>
+          <th>Valor a Receber</th>
+          <th>Data Pagamento</th>
+          <th>Dependentes</th>
+          <th>Histórico</th>
+          <th>Editar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>IND123</td>
+          <td>Fernanda Costa</td>
+          <td>(11) 99888-7766</td>
+          <td>fernanda@exemplo.com</td>
+          <td>321.654.987-00</td>
+          <td>010203</td>
+          <td>0001</td>
+          <td>R$ 520,00</td>
+          <td>02/07/2025</td>
+          <td><span class="link-dependentes" onclick="abrirDependentes('IND123')">3</span></td>
+          <td><a class="link-historico" href="historicocomissionados.html?id=IND123">Ver Histórico</a></td>
+          <td><button class="editar" onclick="editarIndicador(this)">Editar</button></td>
+        </tr>
+        <tr>
+          <td>IND124</td>
+          <td>João Mendes</td>
+          <td>(21) 98877-4455</td>
+          <td>joao@exemplo.com</td>
+          <td>45.789.123/0001-22</td>
+          <td>020304</td>
+          <td>0002</td>
+          <td>R$ 430,00</td>
+          <td>01/07/2025</td>
+          <td><span class="link-dependentes" onclick="abrirDependentes('IND124')">2</span></td>
+          <td><a class="link-historico" href="historicocomissionados.html?id=IND124">Ver Histórico</a></td>
+          <td><button class="editar" onclick="editarIndicador(this)">Editar</button></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="btn-container">
+      <button class="btn" onclick="toggleObservacoes()">+ Adicionar Observação</button>
+      <button class="btn" onclick="salvarModificacoes()">Salvar Modificações</button>
+      <button class="btn" onclick="exportarExcel()">Exportar para Excel</button>
+      <button class="btn" onclick="exportarPDF()">Exportar para PDF</button>
+    </div>
+
+    <div id="area-obs" style="display: none; margin-top: 1.5rem;">
+      <label for="obs">Observações do Financeiro:</label>
+      <textarea id="obs" rows="4" placeholder="Digite observações aqui..."></textarea>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script type="module" src="./js/comissionados-logic.js"></script>
+  <script type="module" src="./js/auth-guard.js"></script>
+</body>
+</html>

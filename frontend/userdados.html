@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dados dos Clientes - Ecossistema Energia</title>
+
+  <!-- Estilos DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"/>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('images/4wfazenda.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: rgba(33, 136, 56, 0.95);
+      color: white;
+      padding: 1em 0;
+      text-align: center;
+      position: relative;
+    }
+    /* Botão Voltar para Home fixo no topo, canto esquerdo */
+    #btnVoltarHome {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #218838;
+      border: none;
+      color: white;
+      padding: 0.4em 0.8em;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    #btnVoltarHome:hover {
+      background-color: #19692c;
+    }
+    main {
+      padding: 2em;
+      background-color: rgba(255, 255, 255, 0.95);
+      margin: 2em;
+      border-radius: 10px;
+    }
+    h2 {
+      color: #218838;
+      margin-bottom: 1em;
+    }
+    table.dataTable thead {
+      background-color: #218838;
+      color: white;
+    }
+    .dt-button {
+      background-color: #28a745 !important;
+      color: white !important;
+      border: none !important;
+      padding: 0.5em 1em !important;
+      margin-right: 0.5em !important;
+      border-radius: 4px !important;
+      cursor: pointer;
+    }
+    .dt-button:hover {
+      background-color: #218838 !important;
+    }
+    #leadsTable_filter {
+      text-align: right;
+      margin-bottom: 1em;
+    }
+    #leadsTable_filter input {
+      padding: 0.4em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    td.editable {
+      cursor: pointer;
+    }
+    #editButton {
+      display: none;
+      margin-top: 10px;
+    }
+    /* Link no nome com estilo padrão */
+    td.nome-link a {
+      color: #218838;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    td.nome-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="btnVoltarHome">⬅ Voltar para Home</button>
+    <h1><img src="../images/4wlogo.jpg" alt="Logo" height="40"> Dados dos Clientes - 4W Ecossistema Energia</h1>
+  </header>
+
+  <main>
+    <h2><img src="../images/4wlogo.jpg" alt="Logo" height="40"> Lista de Dados dos Clientes</h2>
+    <button id="toggleTable" class="btn btn-success mb-3">Mostrar Tabela</button>
+    <table id="leadsTable" class="display nowrap" style="width:100%; display:none;">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Data de Cadastro</th>
+          <th>UC</th>
+          <th>CPF/CNPJ</th>
+          <th>Data de Nascimento</th>
+          <th>Usina</th>
+          <th>Modalidade</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Gerado dinamicamente via script -->
+      </tbody>
+    </table>
+    <button id="editButton" class="btn btn-primary">Salvar Edições</button>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script>
+    // Dados simulados para exemplo
+    const nomes = ["João Silva", "Maria Oliveira", "Carlos Souza", "Ana Paula", "Felipe Costa"];
+    const emails = ["joao.silva", "maria.oliveira", "carlos.souza", "ana.paula", "felipe.costa"];
+    const telefones = ["91234-5678", "98765-4321", "99887-6655", "91111-2222", "98888-7777"];
+    const status = ["Contato Inicial", "Proposta Enviada", "Negociação", "Fechado", "Cancelado"];
+    const modalidades = ["Autoconsumo", "Compartilhada"];
+    const usinas = ["Usina Norte", "Usina Centro", "Usina Sul"];
+
+    // Função para gerar dados com link no nome para a página individual com o id simulado (índice)
+    function gerarDadosClientes(qtd) {
+      const dados = [];
+      for (let i = 0; i < qtd; i++) {
+        const nome = nomes[i % nomes.length];
+        const email = `${emails[i % emails.length]}${i}@example.com`;
+        const telefone = `(62) ${telefones[i % telefones.length]}`;
+        const dataCadastro = new Date(2025, 5, 1 + (i % 30)).toISOString().split('T')[0];
+        const uc = `UC${100000 + i}`;
+        const cpfcnpj = i % 2 === 0 ? `000.000.000-0${i % 9}` : `00.000.000/0000-0${i % 9}`;
+        const nascimento = `199${i % 10}-0${(i % 12) + 1}-15`;
+        const usina = usinas[i % usinas.length];
+        const modalidade = modalidades[i % modalidades.length];
+        const stat = status[i % status.length];
+        // O nome vira um link que aponta para visualizadoridividual.html?id=i
+        dados.push([
+          `<a href="visualizadoridividual.html?id=${i}" class="nome-link">${nome}</a>`,
+          email,
+          telefone,
+          dataCadastro,
+          uc,
+          cpfcnpj,
+          nascimento,
+          usina,
+          modalidade,
+          stat
+        ]);
+      }
+      return dados;
+    }
+
+    $(document).ready(function () {
+      // Inicializa DataTable
+      const table = $('#leadsTable').DataTable({
+        data: gerarDadosClientes(251),
+        columns: [
+          { title: "Nome" },
+          { title: "E-mail" },
+          { title: "Telefone" },
+          { title: "Data de Cadastro" },
+          { title: "UC" },
+          { title: "CPF/CNPJ" },
+          { title: "Data de Nascimento" },
+          { title: "Usina" },
+          { title: "Modalidade" },
+          { title: "Status" }
+        ],
+        createdRow: function(row) {
+          $('td', row).addClass('editable');
+        },
+        pageLength: 55,
+        dom: 'Bfrtip',
+        buttons: [
+          {
+            extend: 'excelHtml5',
+            text: 'Exportar para Excel',
+            title: 'Dados_Clientes_4W'
+          },
+          {
+            extend: 'pdfHtml5',
+            text: 'Exportar para PDF',
+            title: 'Dados_Clientes_4W',
+            orientation: 'portrait',
+            pageSize: 'A4'
+          }
+        ],
+        language: {
+          url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json'
+        }
+      });
+
+      // Permite editar as células clicando nelas
+      $('#leadsTable tbody').on('click', 'td.editable', function () {
+        const cell = table.cell(this);
+        const original = cell.data();
+        // Não deixa editar o link do nome
+        if ($(this).hasClass('nome-link') || $(this).find('a').length) return;
+
+        const input = $('<input type="text" class="form-control" />').val(original);
+        $(this).html(input);
+        input.focus();
+        $('#editButton').show();
+        input.blur(function () {
+          cell.data(input.val()).draw();
+        });
+      });
+
+      // Botão para mostrar/ocultar tabela
+      $('#toggleTable').on('click', function () {
+        $('#leadsTable').toggle();
+        $(this).text($('#leadsTable').is(':visible') ? 'Ocultar Tabela' : 'Mostrar Tabela');
+      });
+
+      // Botão salvar (apenas alert pra demo)
+      $('#editButton').on('click', function () {
+        alert('Alterações salvas com sucesso!');
+        $(this).hide();
+      });
+
+      // Botão voltar para home
+      document.getElementById('btnVoltarHome').addEventListener('click', () => {
+        window.location.href = 'home.html';
+      });
+    });
+  </script>
+</body>
+</html>

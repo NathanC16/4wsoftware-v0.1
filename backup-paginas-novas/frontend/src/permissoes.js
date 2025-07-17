@@ -1,0 +1,122 @@
+// src/services/permissoes.js
+import { getUsuario } from './authService';
+
+const permissoes = {
+  administrador: {
+    podeIndicar: true,
+    podeAcessarSistema: true,
+    podeReceberLeads: true,
+    podeQualificarLeads: true,
+    podeAcompanharContratacao: true,
+    podeVerificarCadastro: true,
+    podeAprovarCadastro: true,
+    podeAtribuirLeads: true,
+    podeAjustarPermissoes: true,
+    podeAcessarRelatorios: true,
+  },
+  diretorFinanceiro: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: false,
+    podeQualificarLeads: false,
+    podeAcompanharContratacao: false,
+    podeVerificarCadastro: true,
+    podeAprovarCadastro: true,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: true,
+  },
+  rh: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: false,
+    podeQualificarLeads: false,
+    podeAcompanharContratacao: true,
+    podeVerificarCadastro: true,
+    podeAprovarCadastro: true,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: true,
+  },
+  gerenteComercial: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: true,
+    podeQualificarLeads: true,
+    podeAcompanharContratacao: true,
+    podeVerificarCadastro: true,
+    podeAprovarCadastro: true,
+    podeAtribuirLeads: true,
+    podeAjustarPermissoes: true,
+    podeAcessarRelatorios: true,
+  },
+  backoffice: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: false,
+    podeQualificarLeads: false,
+    podeAcompanharContratacao: false,
+    podeVerificarCadastro: true,
+    podeAprovarCadastro: true,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: false,
+  },
+  closer: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: true,
+    podeQualificarLeads: true,
+    podeAcompanharContratacao: true,
+    podeVerificarCadastro: false,
+    podeAprovarCadastro: false,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: false,
+  },
+  vendedor: { 
+    // vendedor externo
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: true,
+    podeQualificarLeads: true,
+    podeAcompanharContratacao: true,
+    podeVerificarCadastro: false,
+    podeAprovarCadastro: false,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: false,
+  },
+  sdr: {
+    podeIndicar: false,
+    podeAcessarSistema: true,
+    podeReceberLeads: true,
+    podeQualificarLeads: false,
+    podeAcompanharContratacao: false,
+    podeVerificarCadastro: false,
+    podeAprovarCadastro: false,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: false,
+  },
+  cliente: {
+    podeIndicar: true,
+    podeAcessarSistema: true,
+    podeReceberLeads: false,
+    podeQualificarLeads: false,
+    podeAcompanharContratacao: false,
+    podeVerificarCadastro: false,
+    podeAprovarCadastro: false,
+    podeAtribuirLeads: false,
+    podeAjustarPermissoes: false,
+    podeAcessarRelatorios: false,
+  },
+};
+
+export function verificaPermissao(permissao) {
+  const usuario = getUsuario();
+  if (!usuario || !usuario.tipoUsuario) return false;
+  return permissoes[usuario.tipoUsuario]?.[permissao] || false;
+}
+
+export default permissoes;

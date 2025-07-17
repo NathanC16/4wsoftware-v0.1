@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Histórico Completo de Comissões</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('images/usinap.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.9);
+      margin: 2rem auto;
+      padding: 2rem;
+      max-width: 98%;
+      border-radius: 12px;
+      box-shadow: 0 0 25px #4caf50;
+    }
+    h1 {
+      text-align: center;
+      color: #b2ffb2;
+      margin-bottom: 1.5rem;
+    }
+    .filtro-container {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+    select, input[type="text"] {
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      min-width: 180px;
+    }
+    button.btn {
+      background: #66bb6a;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      padding: 0.8rem 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button.btn:hover {
+      background-color: #43a047;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      color: #fff;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #4caf50;
+      text-align: center;
+      user-select: text;
+    }
+    th {
+      background-color: #2e7d32;
+    }
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    td[contenteditable="true"] {
+      background-color: rgba(102, 187, 106, 0.15);
+      border-radius: 4px;
+      cursor: text;
+    }
+    @media (max-width: 768px) {
+      .filtro-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      select, input[type="text"] {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Histórico Completo de Comissões</h1>
+    <div class="filtro-container">
+      <select id="tipoBusca" onchange="resetarPrimeiroFiltro()">
+        <option value="">Selecionar Tipo</option>
+        <option value="comissionado">Comissionado</option>
+        <option value="dependente">Dependente</option>
+      </select>
+      <select id="primeiroFiltro" onchange="carregarSegundoFiltro()">
+        <option value="">Selecione</option>
+      </select>
+      <select id="segundoFiltro" onchange="gerarTabelaAvancada()">
+        <option value="">Selecione</option>
+      </select>
+      <button class="btn" onclick="limparFiltros()">Limpar Filtros</button>
+    </div>
+
+    <div id="tabela"></div>
+
+    <div style="margin-top:1rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+      <button class="btn" onclick="salvarAlteracoes()">Salvar Alterações</button>
+      <button class="btn" onclick="exportarExcel()">Exportar Excel</button>
+      <button class="btn" onclick="exportarPDF()">Exportar PDF</button>
+    </div>
+  </div>
+
+<script>
+  // Classes para POO
+  class HistoricoMensal {
+    constructor(mes, ano, kwh, valor, porcentagem, status, emissao, pagamento, contrato, valorKwh) {
+      this.mes = mes;
+      this.ano = ano;
+      this.kwh = kwh;
+      this.valor = parseFloat(valor);
+      this.porcentagem = parseFloat(porcentagem);
+      this.status = status.includes('Pago') ? 'Pago' : 'Inadimplente';
+      this.emissao = emissao;
+      this.pagamento = pagamento;
+      this.contrato = contrato || '-';
+      this.valorKwh = valorKwh || ((this.valor / this.kwh) || 0).toFixed(2);
+    }
+    get comissao() {
+      return (this.valor * (this.porcentagem / 100)).toFixed(2);
+    }
+  }
+
+  class Dependente {
+    constructor(id, nome) {
+      this.id = id;
+      this.nome = nome;
+      this.relacoes = [];
+    }
+    adicionarRelacao(mes, ano, kwh, valor, porcentagem, status, emissao, pagamento, contrato, valorKwh) {
+      this.relacoes.push(new HistoricoMensal(mes, ano, kwh, valor, porcentagem, status, emissao, pagamento, contrato, valorKwh));
+    }
+  }
+
+  class Comissionado {
+    constructor(id, nome) {
+      this.id = id;
+      this.nome = nome;
+      this.dependentes = [];
+    }
+    adicionarDependente(dep) {
+      this.dependentes.push(dep);
+    }
+  }
+
+  const comissionados = [];
+
+  // Simula carregar dados do localStorage (ou pode substituir por JSON fixo)
+  function carregarDadosDoCadastro() {
+    const dadosSalvos = localStorage.getItem('cadastroComissionados');
+    if (!dadosSalvos) {
+      // Exemplo básico pra testar se localStorage vazio
+      const exemplo = [
+        {
+          id: 'COM001',
+          nome: 'Fernanda Silva',
+          dependentes: [
+            {
+              id: 'DEP001',
+              nome: 'Carlos Lima',
+              relacoes: [
+                { mes:'07', ano:'2025', kwh:280, valor:340, porcentagem:2, status:'Pago', emissao:'01/07/2025', pagamento:'10/07/2025', contrato:'CTR1001', valorKwh:'1.21' },
+                { mes:'06', ano:'2025', kwh:250, valor:300, porcentagem:2, status:'Inadimplente', emissao:'01/06/2025', pagamento:'', contrato:'CTR1001', valorKwh:'1.20' }
+              ]
+            },
+            {
+              id: 'DEP002',
+              nome: 'Ana Beatriz',
+              relacoes: [
+                { mes:'07', ano:'2025', kwh:190, valor:220, porcentagem:1.5, status:'Pago', emissao:'01/07/2025', pagamento:'08/07/2025', contrato:'CTR1002', valorKwh:'1.16' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'COM002',
+          nome: 'João Pedro',
+          dependentes: [
+            {
+              id: 'DEP003',
+              nome: 'Maria Oliveira',
+              relacoes: [
+                { mes:'07', ano:'2025', kwh:300, valor:360, porcentagem:2.5, status:'Pago', emissao:'01/07/2025', pagamento:'09/07/2025', contrato:'CTR2001', valorKwh:'1.20' }
+              ]
+            }
+          ]
+        }
+      ];
+      localStorage.setItem('cadastroComissionados', JSON.stringify(exemplo));
+      return carregarDadosDoCadastro();
+    }
+
+    const dados = JSON.parse(localStorage.getItem('cadastroComissionados'));
+    dados.forEach(c => {
+      const novoCom = new Comissionado(c.id, c.nome);
+      c.dependentes.forEach(d => {
+        const novoDep = new Dependente(d.id, d.nome);
+        d.relacoes.forEach(r => {
+          novoDep.adicionarRelacao(r.mes, r.ano, r.kwh, r.valor, r.porcentagem, r.status, r.emissao, r.pagamento, r.contrato, r.valorKwh);
+        });
+        novoCom.adicionarDependente(novoDep);
+      });
+      comissionados.push(novoCom);
+    });
+  }
+
+  // Filtros dinâmicos
+  const tipoBusca = document.getElementById('tipoBusca');
+  const primeiroFiltro = document.getElementById('primeiroFiltro');
+  const segundoFiltro = document.getElementById('segundoFiltro');
+
+  function resetarPrimeiroFiltro() {
+    primeiroFiltro.innerHTML = '<option value="">Selecione</option>';
+    segundoFiltro.innerHTML = '<option value="">Selecione</option>';
+    limparTabela();
+    if(!tipoBusca.value) return;
+
+    if(tipoBusca.value === 'comissionado') {
+      comissionados.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.textContent = c.nome;
+        primeiroFiltro.appendChild(option);
+      });
+    } else if(tipoBusca.value === 'dependente') {
+      // Lista única de dependentes (sem repetição)
+      const dependentesUnicos = [];
+      comissionados.forEach(c => {
+        c.dependentes.forEach(d => {
+          if(!dependentesUnicos.some(dep => dep.id === d.id)) dependentesUnicos.push(d);
+        });
+      });
+      dependentesUnicos.forEach(d => {
+        const option = document.createElement('option');
+        option.value = d.id;
+        option.textContent = d.nome;
+        primeiroFiltro.appendChild(option);
+      });
+    }
+  }
+
+  function carregarSegundoFiltro() {
+    segundoFiltro.innerHTML = '<option value="">Selecione</option>';
+    limparTabela();
+    if(!primeiroFiltro.value) return;
+
+    if(tipoBusca.value === 'comissionado') {
+      const com = comissionados.find(c => c.id === primeiroFiltro.value);
+      if(!com) return;
+      com.dependentes.forEach(d => {
+        const option = document.createElement('option');
+        option.value = d.id;
+        option.textContent = d.nome;
+        segundoFiltro.appendChild(option);
+      });
+    } else if(tipoBusca.value === 'dependente') {
+      const coms = comissionados.filter(c => c.dependentes.some(d => d.id === primeiroFiltro.value));
+      coms.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.id;
+        option.textContent = c.nome;
+        segundoFiltro.appendChild(option);
+      });
+    }
+  }
+
+  function limparFiltros() {
+    tipoBusca.value = "";
+    primeiroFiltro.innerHTML = '<option value="">Selecione</option>';
+    segundoFiltro.innerHTML = '<option value="">Selecione</option>';
+    limparTabela();
+  }
+
+  // Função pra limpar tabela
+  function limparTabela() {
+    document.getElementById('tabela').innerHTML = '';
+  }
+
+  // Gera tabela com base nos filtros selecionados
+  function gerarTabelaAvancada() {
+    const tipo = tipoBusca.value;
+    const primeiroId = primeiroFiltro.value;
+    const segundoId = segundoFiltro.value;
+
+    if(!tipo || !primeiroId || !segundoId) {
+      limparTabela();
+      return;
+    }
+
+    let com, dep;
+
+    if(tipo === 'comissionado') {
+      com = comissionados.find(c => c.id === primeiroId);
+      if(!com) return;
+      dep = com.dependentes.find(d => d.id === segundoId);
+      if(!dep) return;
+    } else if(tipo === 'dependente') {
+      dep = null;
+      let coms = [];
+      // Encontrar dependente
+      comissionados.forEach(c => {
+        c.dependentes.forEach(d => {
+          if(d.id === primeiroId) dep = d;
+        });
+      });
+      if(!dep) return;
+      com = comissionados.find(c => c.id === segundoId);
+      if(!com) return;
+    }
+
+    if(!dep || !com) {
+      limparTabela();
+      return;
+    }
+
+    let html = `<table>
+      <thead>
+        <tr>
+          <th>Comissionado</th>
+          <th>Dependente</th>
+          <th>Mês/Ano</th>
+          <th>kWh Compensado</th>
+          <th>R$ kWh Ciclo</th>
+          <th>Valor Fatura (R$)</th>
+          <th>% Comissão</th>
+          <th>Valor Comissão (R$)</th>
+          <th>Status Cliente</th>
+          <th>Nº Contrato</th>
+          <th>Data Emissão</th>
+          <th>Data Pagamento</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    dep.relacoes.forEach(r => {
+      html += `<tr>
+        <td>${com.nome}</td>
+        <td>${dep.nome}</td>
+        <td>${r.mes}/${r.ano}</td>
+        <td contenteditable="true">${r.kwh}</td>
+        <td contenteditable="true">${r.valorKwh}</td>
+        <td contenteditable="true">${r.valor.toFixed(2)}</td>
+        <td contenteditable="true">${r.porcentagem}</td>
+        <td>${r.comissao}</td>
+        <td contenteditable="true">${r.status}</td>
+        <td contenteditable="true">${r.contrato}</td>
+        <td contenteditable="true">${r.emissao}</td>
+        <td contenteditable="true">${r.pagamento}</td>
+      </tr>`;
+    });
+
+    html += `</tbody></table>`;
+
+    document.getElementById('tabela').innerHTML = html;
+  }
+
+  function salvarAlteracoes() {
+    // Aqui você pode implementar salvar as alterações no localStorage
+    // Por enquanto, só alerta
+    alert('💾 Alterações salvas com sucesso!');
+  }
+
+  function exportarExcel() {
+    const tabela = document.querySelector('#tabela table');
+    if (!tabela) {
+      alert('Nada para exportar!');
+      return;
+    }
+    const blob = new Blob(["\uFEFF" + tabela.outerHTML], { type: 'application/vnd.ms-excel' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'historico_completo.xls';
+    link.click();
+  }
+
+  async function exportarPDF() {
+    const container = document.querySelector('.container');
+    const canvas = await html2canvas(container);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'pt', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save("historico_completo.pdf");
+  }
+
+  // Inicialização
+  window.addEventListener('DOMContentLoaded', () => {
+    carregarDadosDoCadastro();
+    // Inicia dropdowns vazios
+  });
+</script>
+</body>
+</html>
